@@ -1,0 +1,152 @@
+﻿@model ASM.Models.KhachHang
+
+@{
+    ViewData["Title"] = "Register Account";
+    Layout = "_LoginLayout";
+}
+
+<!-- Logo/Brand (optional) -->
+<div class="logo-brand">
+    <img src="~/images/logo.png" alt="ReSole Logo" class="logo-brand-img" />
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg">
+                <!-- Card Header -->
+                <div class="card-header">
+                    <i class="bi bi-person-plus-fill"></i>
+                    <h3>Create New Account</h3>
+                    <p>Fill in information to register</p>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body">
+                    <!-- Success Message -->
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            <i class="bi bi-check-circle"></i>
+                            <strong>@TempData["SuccessMessage"]</strong>
+                        </div>
+                    }
+
+                    <!-- Error Messages -->
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).ToList();
+                        if (errors.Any())
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <strong>Error!</strong> Please check your information.
+                                <ul>
+                                    @foreach (var error in errors)
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    }
+
+                    <!-- Register Form -->
+                    <form asp-action="Register" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label asp-for="Fullname" class="form-label">
+                                <i class="bi bi-person"></i> Full Name
+                            </label>
+                            <input asp-for="Fullname" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Enter your full name" />
+                            <span asp-validation-for="Fullname" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">
+                                <i class="bi bi-envelope"></i> Email
+                            </label>
+                            <input asp-for="Email" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Enter your email"
+                                   autocomplete="email" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">
+                                <i class="bi bi-lock"></i> Password
+                            </label>
+                            <input asp-for="Password" 
+                                   class="form-control form-control-lg" 
+                                   type="password" 
+                                   placeholder="Enter password"
+                                   autocomplete="new-password" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label asp-for="ConfirmPassword" class="form-label">
+                                <i class="bi bi-lock-fill"></i> Confirm Password
+                            </label>
+                            <input asp-for="ConfirmPassword" 
+                                   class="form-control form-control-lg" 
+                                   type="password" 
+                                   placeholder="Re-enter password"
+                                   autocomplete="new-password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="mb-3">
+                            <label asp-for="PhoneNumber" class="form-label">
+                                <i class="bi bi-telephone"></i> Phone Number
+                            </label>
+                            <input asp-for="PhoneNumber" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Enter your phone number" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="mb-4">
+                            <label asp-for="NgaySinh" class="form-label">
+                                <i class="bi bi-calendar"></i> Date of Birth
+                            </label>
+                            <input asp-for="NgaySinh" 
+                                   class="form-control form-control-lg" 
+                                   type="date" />
+                            <span asp-validation-for="NgaySinh" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-lg">
+                                <i class="bi bi-person-check"></i> Register
+                            </button>
+                        </div>
+
+                        <!-- Login Link -->
+                        <div class="text-center">
+                            <p class="text-white small">
+                                Already have an account? 
+                                <a asp-controller="Khachhang" asp-action="Login">Login now</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

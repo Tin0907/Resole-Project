@@ -1,0 +1,108 @@
+﻿@model ViewLogin
+
+@{
+    ViewData["Title"] = "Customer Login";
+    Layout = "_LoginLayout";
+}
+
+<!-- Logo/Brand (optional) -->
+<div class="logo-brand">
+    <img src="~/images/logo.png" alt="ReSole Logo" class="logo-brand-img" />
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-5 col-md-6">
+            <div class="card shadow-lg">
+                <!-- Card Header -->
+                <div class="card-header">
+                    <i class="bi bi-unlock-fill"></i>
+                    <h3>Customer Login</h3>
+                    <p>Use your email to access</p>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body">
+                    <!-- Success Message -->
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            <i class="bi bi-check-circle"></i>
+                            <strong>@TempData["SuccessMessage"]</strong>
+                        </div>
+                    }
+
+                    <!-- Error Messages -->
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).ToList();
+                        if (errors.Any())
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <strong>Error!</strong> Please check your information.
+                                <ul>
+                                    @foreach (var error in errors)
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    }
+
+                    <!-- Login Form -->
+                    <form asp-action="Login" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="ReturnUrl" />
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">
+                                <i class="bi bi-envelope"></i> Email
+                            </label>
+                            <input asp-for="Email" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Enter your email"
+                                   autocomplete="email" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label asp-for="Password" class="form-label">
+                                <i class="bi bi-lock"></i> Password
+                            </label>
+                            <input asp-for="Password" 
+                                   class="form-control form-control-lg" 
+                                   type="password" 
+                                   placeholder="Enter password"
+                                   autocomplete="current-password" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-lg">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </button>
+                        </div>
+
+                        <!-- Register Link -->
+                        <div class="text-center">
+                            <p class="text-white small">
+                                Don't have an account? 
+                                <a asp-controller="Khachhang" asp-action="Register">Register now</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

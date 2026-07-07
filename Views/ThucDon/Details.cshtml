@@ -1,0 +1,658 @@
+﻿@model ASM.Models.Giay
+
+@{
+    ViewData["Title"] = "Product Details";
+    Layout = "_WebLayout";
+}
+
+<style>
+    .product-detail-page {
+        background: #f8f9fa;
+        min-height: calc(100vh - 200px);
+        padding: 2rem 0;
+    }
+
+    .product-image-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        margin-bottom: 2rem;
+    }
+
+    .main-image {
+        width: 100%;
+        height: auto;
+        max-height: 600px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+    }
+
+    .product-info-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .product-category-badge {
+        display: inline-block;
+        background: #667eea;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+    }
+
+    .product-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .product-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #10b981;
+        margin-bottom: 1.5rem;
+    }
+
+    .stock-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 10px;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .in-stock {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .out-of-stock {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .divider {
+        height: 2px;
+        background: #e9ecef;
+        margin: 1.5rem 0;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .product-description {
+        color: #4a5568;
+        line-height: 1.8;
+        font-size: 1rem;
+    }
+
+    .size-selector {
+        margin-bottom: 1.5rem;
+    }
+
+    .size-label {
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .size-options {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .size-option {
+        width: 60px;
+        height: 60px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #4a5568;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .size-option:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+    }
+
+    .size-option.selected {
+        background: #667eea;
+        border-color: #667eea;
+        color: white;
+    }
+
+    .quantity-selector {
+        margin-bottom: 1.5rem;
+    }
+
+    .quantity-label {
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .quantity-control {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+        background: white;
+    }
+
+    .quantity-btn {
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: #667eea;
+        color: white;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .quantity-btn:hover {
+        background: #5568d3;
+        transform: scale(1.1);
+    }
+
+    .quantity-btn:disabled {
+        background: #cbd5e0;
+        cursor: not-allowed;
+    }
+
+    .quantity-value {
+        font-size: 1.2rem;
+        font-weight: 600;
+        min-width: 50px;
+        text-align: center;
+    }
+
+    .btn-add-to-cart {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        width: 100%;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-add-to-cart:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-add-to-cart:disabled {
+        background: #cbd5e0;
+        cursor: not-allowed;
+    }
+
+    .btn-buy-now {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .btn-buy-now:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-buy-now:disabled {
+        background: #cbd5e0;
+        cursor: not-allowed;
+    }
+
+    .features-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .features-list li {
+        padding: 0.75rem 0;
+        color: #4a5568;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .features-list li i {
+        color: #10b981;
+        font-size: 1.2rem;
+    }
+
+    @@media (max-width: 768px) {
+        .product-title {
+            font-size: 1.8rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+        }
+
+        .main-image {
+            max-height: 400px;
+        }
+    }
+
+    .spin-icon {
+        display: inline-block;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @@keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+</style>
+
+<div class="product-detail-page">
+    <div class="container-fluid" style="width: 90%; max-width: 1600px; margin: 0 auto;">
+        <div class="row">
+            <!-- Product Image -->
+            <div class="col-lg-6 mb-4">
+                <div class="product-image-section">
+                    @if (!string.IsNullOrEmpty(Model.Hinh))
+                    {
+                        <img src="~/images/Giay/@Model.Hinh" alt="@Model.Ten" class="main-image">
+                    }
+                    else
+                    {
+                        <div class="main-image bg-light d-flex align-items-center justify-content-center" style="height: 600px;">
+                            <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Product Information -->
+            <div class="col-lg-6">
+                <div class="product-info-section">
+                    <!-- Category Badge -->
+                    <span class="product-category-badge">@Model.PhanLoai</span>
+
+                    <!-- Product Name -->
+                    <h1 class="product-title poetsen-font">@Model.Ten</h1>
+
+                    <!-- Price -->
+                    <div class="product-price">@Model.Gia.ToString("N0") VND</div>
+
+                    <!-- Stock Status -->
+                    @if (Model.TrangThai)
+                    {
+                        <div class="stock-status in-stock">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>In Stock</span>
+                            <span class="ms-3 text-muted">Available: <strong id="availableCount">@Model.Quantity</strong></span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="stock-status out-of-stock">
+                            <i class="bi bi-x-circle-fill"></i>
+                            <span>Out of Stock</span>
+                            <span class="ms-3 text-muted">Available: <strong id="availableCount">@Model.Quantity</strong></span>
+                        </div>
+                    }
+
+                    <div class="divider"></div>
+
+                    <!-- Description -->
+                    <div class="section-title">
+                        <i class="bi bi-card-text"></i>
+                        <span>Description</span>
+                    </div>
+                    <p class="product-description">
+                        @if (!string.IsNullOrWhiteSpace(Model.MoTa))
+                        {
+                            @Model.MoTa
+                        }
+                        else
+                        {
+                            <span class="text-muted">Quality sneakers, suitable for youth, soft and comfortable.</span>
+                        }
+                    </p>
+
+                    <div class="divider"></div>
+
+                    @if (Model.TrangThai)
+                    {
+                        <!-- Size Selector -->
+                        <div class="size-selector">
+                            <div class="size-label">
+                                <i class="bi bi-rulers"></i>
+                                <span>Select Size</span>
+                            </div>
+                            <div class="size-options">
+                                <div class="size-option" data-size="38">38</div>
+                                <div class="size-option" data-size="39">39</div>
+                                <div class="size-option" data-size="40">40</div>
+                                <div class="size-option" data-size="41">41</div>
+                                <div class="size-option" data-size="42">42</div>
+                                <div class="size-option" data-size="43">43</div>
+                            </div>
+                        </div>
+
+                        <!-- Quantity Selector -->
+                        <div class="quantity-selector">
+                            <div class="quantity-label">
+                                <i class="bi bi-123"></i>
+                                <span>Quantity</span>
+                            </div>
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn" id="btnDecrease">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <span class="quantity-value" id="quantityValue">1</span>
+                                <button type="button" class="quantity-btn" id="btnIncrease">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <button type="button" class="btn btn-add-to-cart" id="btnAddToCart" disabled>
+                            <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                        </button>
+
+                        <button type="button" class="btn btn-buy-now" id="btnBuyNow" disabled>
+                            <i class="bi bi-lightning-fill me-2"></i>Buy Now
+                        </button>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            <strong>Out of Stock</strong> - This product is currently unavailable.
+                        </div>
+                    }
+
+                    <div class="divider"></div>
+
+                    <!-- Product Features -->
+                    <div class="section-title">
+                        <i class="bi bi-patch-check"></i>
+                        <span>Why Choose This Product?</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>
+                            <i class="bi bi-shield-check"></i>
+                            <span>100% Authentic Guarantee</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-truck"></i>
+                            <span>Free Nationwide Shipping</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-arrow-repeat"></i>
+                            <span>30-Day Return Policy</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-box-seam"></i>
+                            <span>Original Brand Box</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let selectedSize = null;
+            let quantity = 1;
+            const maxQuantity = @Model.Quantity;
+
+            const qtyEl = document.getElementById('quantityValue');
+            const addToCartBtn = document.getElementById('btnAddToCart');
+            const buyNowBtn = document.getElementById('btnBuyNow');
+            const btnDecrease = document.getElementById('btnDecrease');
+            const btnIncrease = document.getElementById('btnIncrease');
+            const sizeOptions = document.querySelectorAll('.size-option');
+            const availEl = document.getElementById('availableCount');
+
+            // Safe initialization
+            if (qtyEl) qtyEl.textContent = Math.min(quantity, Math.max(1, maxQuantity));
+            if (maxQuantity <= 0) {
+                if (addToCartBtn) addToCartBtn.disabled = true;
+                if (buyNowBtn) buyNowBtn.disabled = true;
+            }
+
+            // Size selection
+            if (sizeOptions && sizeOptions.length) {
+                sizeOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        sizeOptions.forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedSize = this.dataset.size;
+                        updateButtonStates();
+                    });
+                });
+            }
+
+            // Quantity controls
+            if (btnDecrease) {
+                btnDecrease.addEventListener('click', function() {
+                    if (quantity > 1) {
+                        quantity--;
+                        if (qtyEl) qtyEl.textContent = quantity;
+                    }
+                });
+            }
+
+            if (btnIncrease) {
+                btnIncrease.addEventListener('click', function() {
+                    if (quantity < 99 && quantity < maxQuantity) {
+                        quantity++;
+                        if (qtyEl) qtyEl.textContent = quantity;
+                    } else {
+                        if (typeof showToast === 'function') showToast('warning', 'Stock limit', `Only ${maxQuantity} item(s) available`);
+                    }
+                });
+            }
+
+            // Update button states
+            function updateButtonStates() {
+                if (!addToCartBtn || !buyNowBtn) return;
+
+                if (!selectedSize || maxQuantity <= 0) {
+                    addToCartBtn.disabled = true;
+                    buyNowBtn.disabled = true;
+                    return;
+                }
+
+                addToCartBtn.disabled = false;
+                buyNowBtn.disabled = false;
+
+                if (quantity > maxQuantity) {
+                    quantity = maxQuantity;
+                    if (qtyEl) qtyEl.textContent = quantity;
+                    if (typeof showToast === 'function') showToast('info', 'Adjusted', `Quantity adjusted to available stock: ${maxQuantity}`);
+                }
+            }
+
+            // Ensure state correct on load
+            updateButtonStates();
+
+            // Add to Cart
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', async function() {
+                    if (!selectedSize) {
+                        if (typeof showToast === 'function') showToast('warning', 'Select Size', 'Please select a size before adding to cart');
+                        return;
+                    }
+
+                    if (quantity > maxQuantity) {
+                        if (typeof showToast === 'function') showToast('warning', 'Stock limit', `Only ${maxQuantity} item(s) available`);
+                        return;
+                    }
+
+                    const btn = this;
+                    const originalHTML = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="bi bi-arrow-repeat me-2 spin-icon"></i>Adding...';
+
+                    try {
+                        const response = await fetch('/Cart/Add', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                giayId: @Model.Id,
+                                size: selectedSize ? selectedSize.toString() : null,
+                                quantity: quantity
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            if (typeof updateCartBadge === 'function') updateCartBadge(data.cartCount);
+                            if (typeof showToast === 'function') showToast('success', 'Added to Cart', `${quantity} item(s) added — Size ${selectedSize}`);
+                            if (availEl) {
+                                const newVal = Math.max(0, parseInt(availEl.textContent || '0') - quantity);
+                                availEl.textContent = newVal;
+                                if (newVal <= 0) {
+                                    const stockNode = document.querySelector('.stock-status');
+                                    if (stockNode) {
+                                        stockNode.classList.remove('in-stock');
+                                        stockNode.classList.add('out-of-stock');
+                                        const firstSpan = stockNode.querySelector('span');
+                                        if (firstSpan) firstSpan.textContent = 'Out of Stock';
+                                    }
+                                    if (addToCartBtn) addToCartBtn.disabled = true;
+                                    if (buyNowBtn) buyNowBtn.disabled = true;
+                                }
+                            }
+                        } else {
+                            if (data.message && data.message.toLowerCase().includes('login')) {
+                                if (typeof showToast === 'function') showToast('warning', 'Login Required', 'Please login to add products to cart');
+                                setTimeout(() => {
+                                    window.location.href = '/Khachhang/Login?returnUrl=' + encodeURIComponent(window.location.pathname);
+                                }, 1500);
+                            } else {
+                                if (typeof showToast === 'function') showToast('error', 'Error', data.message || 'Could not add to cart');
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        if (typeof showToast === 'function') showToast('error', 'Error', 'Something went wrong. Please try again.');
+                    } finally {
+                        btn.innerHTML = originalHTML;
+                        btn.disabled = false;
+                    }
+                });
+            }
+
+            // Buy Now
+            if (buyNowBtn) {
+                buyNowBtn.addEventListener('click', async function() {
+                    if (!selectedSize) {
+                        if (typeof showToast === 'function') showToast('warning', 'Select Size', 'Please select a size before buying');
+                        return;
+                    }
+
+                    if (quantity > maxQuantity) {
+                        if (typeof showToast === 'function') showToast('warning', 'Stock limit', `Only ${maxQuantity} item(s) available`);
+                        return;
+                    }
+
+                    const btn = this;
+                    const originalHTML = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="bi bi-arrow-repeat me-2 spin-icon"></i>Processing...';
+
+                    try {
+                        const response = await fetch('/Checkout/BuyNow', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                giayId: @Model.Id,
+                                size: selectedSize ? selectedSize.toString() : null,
+                                soLuong: quantity
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            if (typeof showToast === 'function') showToast('info', 'Redirecting', 'Taking you to checkout...');
+                            setTimeout(() => {
+                                window.location.href = '/Checkout/Index?isBuyNow=true';
+                            }, 600);
+                        } else {
+                            if (data.message && data.message.toLowerCase().includes('login')) {
+                                if (typeof showToast === 'function') showToast('warning', 'Login Required', 'Please login to continue');
+                                setTimeout(() => {
+                                    window.location.href = '/Khachhang/Login?returnUrl=' + encodeURIComponent(window.location.pathname);
+                                }, 1500);
+                            } else {
+                                if (typeof showToast === 'function') showToast('error', 'Error', data.message || 'Could not process your request');
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        if (typeof showToast === 'function') showToast('error', 'Error', 'Something went wrong. Please try again.');
+                    } finally {
+                        btn.innerHTML = originalHTML;
+                        btn.disabled = false;
+                    }
+                });
+            }
+        });
+    </script>
+}

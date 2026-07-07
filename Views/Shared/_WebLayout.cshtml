@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ReSole</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ASM.styles.css" asp-append-version="true" />
+    <style>
+        /* Wider main container */
+        .rs-main-container {
+            width: 90%;
+            max-width: 1600px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast-notification {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transform: translateX(120%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 380px;
+            min-width: 280px;
+            backdrop-filter: blur(10px);
+        }
+
+        .toast-notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast-notification.toast-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .toast-notification.toast-error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .toast-notification.toast-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .toast-notification.toast-info {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .toast-notification .toast-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .toast-notification .toast-body {
+            flex: 1;
+        }
+
+        .toast-notification .toast-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .toast-notification .toast-message {
+            font-weight: 400;
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        .toast-notification .toast-close {
+            background: none;
+            border: none;
+            color: white;
+            opacity: 0.7;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            flex-shrink: 0;
+            transition: opacity 0.2s;
+        }
+
+        .toast-notification .toast-close:hover {
+            opacity: 1;
+        }
+
+        .toast-notification .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 0 0 12px 12px;
+            animation: toastProgress 3s linear forwards;
+        }
+
+        @@keyframes toastProgress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+    </style>
+</head>
+<body class="bg-white text-dark">
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Sticky Navbar - Moved outside hero section -->
+    <nav class="navbar navbar-expand-lg rs-sticky-nav">
+        <div class="container-xl">
+            <a class="navbar-brand fw-bold text-white poetsen-font" asp-area="" asp-controller="Home" asp-action="UserHome">ReSole</a>
+            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarMain">
+                <ul class="navbar-nav gap-lg-3">
+                    <li class="nav-item"><a class="nav-link rs-nav-link poetsen-font text-white" asp-controller="Home" asp-action="UserHome">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link rs-nav-link poetsen-font text-white" asp-controller="ThucDon" asp-action="Index">SHOP</a></li>
+                    <li class="nav-item"><a class="nav-link rs-nav-link poetsen-font text-white" asp-controller="Home" asp-action="About">ABOUT</a></li>
+                    <li class="nav-item"><a class="nav-link rs-nav-link poetsen-font text-white" asp-controller="Home" asp-action="Contact">CONTACT</a></li>
+                </ul>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <partial name="_LoginPartial" />
+                <button class="btn btn-light rounded-circle p-2 d-none d-lg-inline-flex"><i class="bi bi-search"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section - Only on homepage -->
+    @if (ViewContext.RouteData.Values["action"]?.ToString() == "UserHome" || 
+         ViewContext.RouteData.Values["action"]?.ToString() == "Index" && 
+         ViewContext.RouteData.Values["controller"]?.ToString() == "Home")
+    {
+        <header class="rs-hero">
+            <div class="rs-hero-overlay"></div>
+            <div class="rs-hero-content text-white py-4 py-md-5">
+                <div class="container-xl">
+                    <div class="col-md-6">
+                        <p class="text-uppercase small mb-2 text-white">WELCOME</p>
+                        <h1 class="display-4 fw-bold mb-3 poetsen-font text-white">ReSole —<br /> New Steps,<br /> Same Soul</h1>
+                        <p class="lead mb-4 text-white">ReSole is a great place to find quality shoes. Come by for your next step.</p>
+                        <a asp-controller="ThucDon" asp-action="Index" class="btn btn-light btn-lg px-4 poetsen-font">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+    }
+
+    <div class="rs-body">
+        <main role="main" class="rs-main-container py-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="rs-footer mt-auto">
+        <div class="container-xl py-4">
+            <div class="row align-items-start gy-3">
+                <div class="col-12 col-md-3 d-flex align-items-center gap-3">
+                    <img src="/images/logo.png" alt="logo resole" style="height:150px; width:auto;" />
+                    <div class="text-white">
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h6 class="text-white text-uppercase fw-semibold mb-3 poetsen-font">Services</h6>
+                    <ul class="list-unstyled text-white-50 small mb-0 d-grid gap-1">
+                        <li><a class="rs-footer-link" asp-controller="ThucDon" asp-action="Index">Shop</a></li>
+                        <li><a class="rs-footer-link" asp-controller="ThucDon" asp-action="Index">Order Ahead</a></li>
+                        <li><a class="rs-footer-link" asp-controller="ThucDon" asp-action="Index">Menu</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h6 class="text-white text-uppercase fw-semibold mb-3 poetsen-font">About Us</h6>
+                    <ul class="list-unstyled text-white-50 small mb-0 d-grid gap-1">
+                        <li><a class="rs-footer-link" asp-controller="Home" asp-action="Contact">Find a Location</a></li>
+                        <li><a class="rs-footer-link" asp-controller="Home" asp-action="About">About Us</a></li>
+                        <li><a class="rs-footer-link" asp-controller="Home" asp-action="About">Our Story</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h6 class="text-white text-uppercase fw-semibold mb-3 poetsen-font">Social Media</h6>
+                    <div class="d-flex align-items-center gap-3 text-white-50 fs-5">
+                        <a class="rs-footer-link" href="#"><i class="bi bi-twitter-x"></i></a>
+                        <a class="rs-footer-link" href="#"><i class="bi bi-instagram"></i></a>
+                        <a class="rs-footer-link" href="#"><i class="bi bi-facebook"></i></a>
+                        <a class="rs-footer-link" href="#"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script>
+        // === Toast Notification System ===
+        function showToast(type, title, message, duration = 3000) {
+            const container = document.getElementById('toastContainer');
+            const icons = {
+                success: 'bi-check-circle-fill',
+                error: 'bi-x-circle-fill',
+                warning: 'bi-exclamation-triangle-fill',
+                info: 'bi-info-circle-fill'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `toast-notification toast-${type}`;
+            toast.innerHTML = `
+                <i class="bi ${icons[type] || icons.info} toast-icon"></i>
+                <div class="toast-body">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <div class="toast-progress"></div>
+            `;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        }
+
+        // === Update Cart Badge ===
+        function updateCartBadge(count) {
+            // Update badge outside (next to username)
+            let badgeOutside = document.getElementById('cart-badge-outside');
+            if (count > 0) {
+                if (!badgeOutside) {
+                    const dropdown = document.getElementById('customerDropdown');
+                    if (dropdown) {
+                        badgeOutside = document.createElement('span');
+                        badgeOutside.className = 'badge bg-danger rounded-pill cart-badge-outside';
+                        badgeOutside.id = 'cart-badge-outside';
+                        dropdown.appendChild(badgeOutside);
+                    }
+                }
+                if (badgeOutside) badgeOutside.textContent = count;
+            } else if (badgeOutside) {
+                badgeOutside.remove();
+            }
+
+            // Update badge inside dropdown
+            let badgeInside = document.getElementById('cart-badge');
+            if (count > 0) {
+                if (!badgeInside) {
+                    const cartLink = document.querySelector('a[href*="/Cart"]');
+                    if (cartLink) {
+                        badgeInside = document.createElement('span');
+                        badgeInside.className = 'badge bg-danger rounded-pill ms-2';
+                        badgeInside.id = 'cart-badge';
+                        cartLink.appendChild(badgeInside);
+                    }
+                }
+                if (badgeInside) badgeInside.textContent = count;
+            } else if (badgeInside) {
+                badgeInside.remove();
+            }
+        }
+
+        // Sticky navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.rs-sticky-nav');
+            if (navbar) {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+        });
+        
+        // Ensure dropdowns work properly
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all dropdowns
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
+            
+            // Prevent dropdown from closing when clicking inside
+            document.querySelectorAll('.dropdown-menu').forEach(function(element) {
+                element.addEventListener('click', function(e) {
+                    // Only stop propagation for non-link elements
+                    if (!e.target.classList.contains('dropdown-item') && 
+                        !e.target.closest('.dropdown-item')) {
+                        e.stopPropagation();
+                    }
+                });
+            });
+            
+            // Debug: Log when dropdown items are clicked
+            document.querySelectorAll('.dropdown-item').forEach(function(item) {
+                item.addEventListener('click', function(e) {
+                    console.log('Dropdown item clicked:', this.href || this.textContent);
+                });
+            });
+        });
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

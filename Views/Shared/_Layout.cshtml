@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] ReSole</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ASM.styles.css" asp-append-version="true" />
+    <style>
+        /* Toast Notification (admin) */
+        .toast-container-admin {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast-admin {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            transform: translateX(120%);
+            opacity: 0;
+            transition: all 0.35s ease;
+            max-width: 360px;
+            min-width: 260px;
+        }
+        .toast-admin.show { transform: translateX(0); opacity: 1; }
+        .toast-admin.success { background: linear-gradient(135deg,#10b981,#059669); }
+        .toast-admin.error { background: linear-gradient(135deg,#ef4444,#dc2626); }
+        .toast-admin.info { background: linear-gradient(135deg,#667eea,#764ba2); }
+        .toast-admin.warning { background: linear-gradient(135deg,#f59e0b,#d97706); }
+        .toast-admin .toast-body { flex:1; }
+        .toast-admin .toast-title { font-weight:700; font-size:0.85rem; text-transform:uppercase; margin-bottom:2px; }
+        .toast-admin .toast-message { font-weight:400; font-size:0.95rem; }
+    </style>
+</head>
+<body>
+    <!-- Toast container for admin pages -->
+    <div class="toast-container-admin" id="toastContainerAdmin"></div>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm admin-navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-speedometer2 me-2" style="font-size: 1.5rem;"></i>ReSole Admin
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="#navbarMain"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <partial name="_MenuPartial" />
+                    </ul>
+                    <partial name="_LoginPartial"/>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid py-4" style="width: 90%; max-width: 1600px; margin-left: auto; margin-right: auto;">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/toasts.js" asp-append-version="true"></script>
+
+    <script>
+        // Admin helper that uses global showToast
+        function showToastAdmin(type, title, message, duration = 3000) {
+            if (typeof showToast === 'function') {
+                showToast(type, title, message, duration);
+                return;
+            }
+            const container = document.getElementById('toastContainerAdmin');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast-admin ${type || 'info'}`;
+            toast.innerHTML = `
+                <div class="toast-body">
+                    <div class="toast-title">${title || ''}</div>
+                    <div class="toast-message">${message || ''}</div>
+                </div>
+                <button class="btn btn-sm btn-outline-light ms-2" onclick="this.parentElement.remove()">OK</button>
+            `;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

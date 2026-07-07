@@ -1,0 +1,342 @@
+@model IEnumerable<ASM.Models.Giay>
+
+@{
+    ViewData["Title"] = "Shop";
+    Layout = "_WebLayout";
+    var searchTerm = ViewData["CurrentFilter"]?.ToString() ?? "";
+    var currentCategory = ViewData["CurrentCategory"]?.ToString() ?? "";
+}
+
+<style>
+    .shop-page {
+        background: #f8f9fa;
+        min-height: calc(100vh - 200px);
+        padding: 2rem 0;
+    }
+
+    .shop-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .shop-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .shop-header p {
+        color: #718096;
+        font-size: 1.1rem;
+    }
+
+    .search-bar {
+        background: white;
+        border-radius: 50px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        padding: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .search-bar input {
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .search-bar input:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    .search-bar .btn {
+        border-radius: 50px;
+        padding: 0.75rem 2rem;
+    }
+
+    .category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .category-btn {
+        padding: 0.6rem 1.2rem;
+        border: 2px solid #e5e7eb;
+        background: white;
+        color: #4b5563;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+    }
+
+    .category-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+    .category-btn.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .category-btn i {
+        font-size: 1rem;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .product-image-container {
+        position: relative;
+        height: 300px;
+        overflow: hidden;
+        background: #f8f9fa;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+
+    .product-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: #10b981;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .out-of-stock-badge {
+        background: #e53e3e;
+    }
+
+    .product-info {
+        padding: 1.5rem;
+    }
+
+    .product-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 0.75rem;
+        min-height: 2.5rem;
+    }
+
+    .product-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 1rem;
+    }
+
+    .btn-view-details {
+        width: 100%;
+        background: #667eea;
+        border: none;
+        color: white;
+        padding: 0.75rem;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-view-details:hover {
+        background: #5568d3;
+        transform: translateY(-2px);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .empty-state i {
+        font-size: 5rem;
+        color: #cbd5e0;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+        color: #718096;
+    }
+
+    .search-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+</style>
+
+<div class="shop-page">
+    <div class="container-fluid" style="width: 90%; max-width: 1600px; margin: 0 auto;">
+        <!-- Shop Header -->
+        <div class="shop-header">
+            <h1 class="poetsen-font">ReSole Shop</h1>
+            <p>Find the perfect pair from our curated selection</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="row justify-content-center mb-2">
+            <div class="col-lg-8">
+                <form method="get" asp-action="Index" class="search-row">
+                    <div class="input-group search-bar flex-grow-1" style="flex:1;">
+                        <span class="input-group-text bg-transparent border-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" 
+                               name="searchTerm" 
+                               value="@searchTerm" 
+                               class="form-control border-0" 
+                               placeholder="Search for shoes, brands, categories..." />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search me-2"></i>Search
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Category Filter Buttons -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8">
+                <div class="category-buttons">
+                    <a href="@Url.Action("Index", "ThucDon")" 
+                       class="category-btn @(string.IsNullOrEmpty(currentCategory) ? "active" : "")">
+                        <i class="bi bi-collection"></i>All
+                    </a>
+                    <a href="@Url.Action("Index", "ThucDon", new { category = 1 })" 
+                       class="category-btn @(currentCategory == "1" ? "active" : "")">
+                        <i class="bi bi-shoe"></i>Leather
+                    </a>
+                    <a href="@Url.Action("Index", "ThucDon", new { category = 2 })" 
+                       class="category-btn @(currentCategory == "2" ? "active" : "")">
+                        <i class="bi bi-shoe"></i>Sneakers
+                    </a>
+                    <a href="@Url.Action("Index", "ThucDon", new { category = 3 })" 
+                       class="category-btn @(currentCategory == "3" ? "active" : "")">
+                        <i class="bi bi-shoe"></i>Sports
+                    </a>
+                    <a href="@Url.Action("Index", "ThucDon", new { category = 4 })" 
+                       class="category-btn @(currentCategory == "4" ? "active" : "")">
+                        <i class="bi bi-star"></i>Special
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(searchTerm))
+        {
+            <div class="text-center mb-3">
+                <p class="text-muted">
+                    Search results for: <strong>"@searchTerm"</strong>
+                    <a asp-action="Index" class="ms-2 text-decoration-none">
+                        <i class="bi bi-x-circle"></i> Clear
+                    </a>
+                </p>
+            </div>
+        }
+
+        <!-- Product Grid -->
+        @if (Model.Any())
+        {
+            <div class="product-grid">
+                @foreach (var item in Model)
+                {
+                    var imageUrl = !string.IsNullOrEmpty(item.Hinh)
+                        ? Url.Content($"~/images/Giay/{item.Hinh}")
+                        : "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80";
+
+                    <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+                        <div class="product-card">
+                            <div class="product-image-container">
+                                <img src="@imageUrl" alt="@item.Ten" class="product-image">
+                                @if (item.Status == ASM.Models.ProductStatus.InStock && item.Quantity > 0)
+                                {
+                                    <span class="product-badge">In Stock</span>
+                                }
+                                else
+                                {
+                                    <span class="product-badge out-of-stock-badge">Out of Stock</span>
+                                }
+                            </div>
+                            <div class="product-info">
+                                <h5 class="product-name">@item.Ten</h5>
+                                <div class="product-price">@item.Gia.ToString("N0") VND</div>
+                                <button type="button" class="btn btn-view-details">
+                                    <i class="bi bi-eye me-2"></i>View Details
+                                </button>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h3>No Products Found</h3>
+                <p>Try adjusting your search or browse all products</p>
+                @if (!string.IsNullOrEmpty(searchTerm) || !string.IsNullOrEmpty(currentCategory))
+                {
+                    <a asp-action="Index" class="btn btn-primary mt-3">
+                        <i class="bi bi-arrow-left me-2"></i>View All Products
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</div>

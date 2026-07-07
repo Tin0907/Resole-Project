@@ -1,0 +1,98 @@
+﻿@model IEnumerable<ASM.Models.KhachHang>
+
+@{
+    ViewData["Title"] = "Customer Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-0 fw-bold text-primary">
+            <i class="bi bi-people-fill me-2"></i>Customer Management
+        </h1>
+        <p class="text-muted small">Manage customer information</p>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <form method="get" asp-action="Index">
+            <div class="input-group input-group-lg shadow-sm">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" 
+                       name="searchTerm" 
+                       value="@ViewData["CurrentFilter"]" 
+                       class="form-control border-start-0 border-end-0 ps-0" 
+                       placeholder="Search by name, email, phone..." />
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search me-2"></i>Search
+                </button>
+                @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()))
+                {
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-x-circle me-2"></i>Clear
+                    </a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3">
+    <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 fw-bold">
+            <i class="bi bi-list-ul me-2"></i>Customer List
+        </h6>
+        <span class="badge bg-primary">Total: @Model.Count() customers</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light border-bottom">
+                    <tr>
+                        <th class="fw-bold text-muted small text-uppercase">Full Name</th>
+                        <th class="fw-bold text-muted small text-uppercase">Email</th>
+                        <th class="fw-bold text-muted small text-uppercase">Phone</th>
+                        <th class="fw-bold text-muted small text-uppercase">Date of Birth</th>
+                        <th class="fw-bold text-muted small text-uppercase">Status</th>
+                        <th class="fw-bold text-muted small text-uppercase text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr class="align-middle">
+                                <td class="fw-bold">@item.Fullname</td>
+                                <td>@item.Email</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@(item.NgaySinh?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+                                <td>
+                                    <span class="badge bg-success">Active</span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-controller="Donhang" asp-action="Index" class="btn btn-sm btn-outline-primary" title="View Orders">
+                                            <i class="bi bi-bag"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox display-4 d-block mb-3"></i>
+                                <p class="mb-0">No customers found</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

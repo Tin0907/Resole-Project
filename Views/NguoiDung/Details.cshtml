@@ -1,0 +1,120 @@
+﻿@model ASM.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="mb-0 fw-bold text-primary">
+            <i class="bi bi-person-circle me-2"></i>User Details
+        </h1>
+        <p class="text-muted small">View detailed user information</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-light py-3 border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-info-circle me-2"></i>User Information
+                </h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Username</h6>
+                            <p class="fs-5 mb-0 fw-bold">@Html.DisplayFor(model => model.User)</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Full Name</h6>
+                            <p class="fs-5 mb-0 fw-bold">@Html.DisplayFor(model => model.HoTen)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Email</h6>
+                            <p class="fs-5 mb-0">@Html.DisplayFor(model => model.Email)</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Job Title</h6>
+                            <p class="fs-5 mb-0">@Html.DisplayFor(model => model.ChucDanh)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Date of Birth</h6>
+                            <p class="fs-5 mb-0">@(Model.NgaySinh?.ToString("dd/MM/yyyy") ?? "N/A")</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Status</h6>
+                            <p class="mb-0">
+                                @if (Model.Locked)
+                                {
+                                    <span class="badge bg-success fs-6">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger fs-6">Locked</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Permission</h6>
+                            <p class="mb-0">
+                                @if (Model.Admin)
+                                {
+                                    <span class="badge bg-danger fs-6">Administrator</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">User</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-light py-3">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-tools me-2"></i>Actions
+                </h6>
+            </div>
+            <div class="card-body">
+                <a asp-action="Update" asp-route-id="@Model.NguoiDungID" class="btn btn-warning w-100 mb-2">
+                    <i class="bi bi-pencil-square me-2"></i>Edit
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.NguoiDungID" class="btn btn-danger w-100 mb-2">
+                    <i class="bi bi-trash me-2"></i>Delete
+                </a>
+                <a asp-action="Index" class="btn btn-secondary w-100">
+                    <i class="bi bi-arrow-left me-2"></i>Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,838 @@
+﻿@model List<ASM.Models.Giay>
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_WebLayout";
+    var specialCollection = ViewBag.SpecialCollection as List<ASM.Models.Giay> ?? new List<ASM.Models.Giay>();
+    var allProducts = ViewBag.AllProducts as List<ASM.Models.Giay> ?? new List<ASM.Models.Giay>();
+}
+
+<div class="user-home-page">
+
+    <!-- SPECIAL SNEAKER COLLECTION Section -->
+    <div class="text-center py-4">
+        <h2 class="text-uppercase fw-bold mb-4 poetsen-font" style="font-size: 1.5rem; letter-spacing: 2px; color: #6c757d;">
+            SPECIAL SNEAKER COLLECTION
+        </h2>
+    </div>
+
+    <!-- Special Collection Cards (3 items) -->
+    <div class="row g-4 mb-5">
+        @if (specialCollection.Any())
+        {
+            foreach (var item in specialCollection)
+            {
+                var imageUrl = !string.IsNullOrEmpty(item.Hinh)
+                    ? Url.Content($"~/images/Giay/{item.Hinh}")
+                    : "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=800&q=80";
+                <div class="col-lg-4">
+                    <a asp-controller="ThucDon" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+                        <div class="product-card shadow-sm h-100">
+                            <div class="product-image" style="background-image: url('@imageUrl');"></div>
+                            <div class="product-body">
+                                <p class="text-uppercase small text-muted mb-1">@item.Gia.ToString("N0") VND</p>
+                                <h5 class="fw-bold mb-2 text-dark">@item.Ten</h5>
+                                <p class="product-description text-muted small mb-0">@(string.IsNullOrWhiteSpace(item.MoTa) ? "Suitable for youth, soft and comfortable" : item.MoTa)</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-light border text-center mb-0">No special products available yet.</div>
+            </div>
+        }
+    </div>
+
+    <!-- OUR LATEST PRODUCTS Section -->
+    <div class="text-center py-4 mt-5">
+        <h2 class="text-uppercase fw-bold mb-4 poetsen-font" style="font-size: 1.5rem; letter-spacing: 2px; color: #6c757d;">
+            OUR LATEST PRODUCTS
+        </h2>
+    </div>
+
+    <!-- All Products Grid -->
+    <div class="row g-4 mb-5">
+        @if (allProducts.Any())
+        {
+            foreach (var item in allProducts)
+            {
+                var imageUrl = !string.IsNullOrEmpty(item.Hinh)
+                    ? Url.Content($"~/images/Giay/{item.Hinh}")
+                    : "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80";
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <a asp-controller="ThucDon" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+                        <div class="latest-product-card shadow-sm h-100">
+                            <div class="latest-product-image" style="background-image: url('@imageUrl');"></div>
+                            <div class="latest-product-body">
+                                <p class="text-uppercase small text-muted mb-1">@item.Gia.ToString("N0") VND</p>
+                                <h6 class="fw-bold mb-1 text-dark">@item.Ten</h6>
+                                <p class="text-muted small mb-0" style="font-size: 0.85rem;">@item.PhanLoai</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-light border text-center mb-0">No products available yet.</div>
+            </div>
+        }
+    </div>
+
+    <!-- Brand Showcase Section Title -->
+    <div class="text-center py-4 mt-5 mb-3">
+        <h2 class="fw-bold mb-2 poetsen-font" style="font-size: 2rem; letter-spacing: 1px; color: #2c3e50;">
+            Made to Move. Made to Match Your Style.
+        </h2>
+        <p class="text-muted" style="font-size: 1rem;">Discover iconic brands that define your journey</p>
+    </div>
+
+    <!-- Lifestyle Section 1 -->
+    <div class="row g-4 align-items-stretch mb-4">  
+        <div class="col-lg-5">
+            <div class="promo-block dark-block h-100 d-flex align-items-center justify-content-center">
+                <img src="~/images/Nike_logo.jpg?v=2" alt="Nike" class="brand-logo-image" />
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="promo-block light-block h-100 p-4 p-lg-5">
+                <p class="text-uppercase text-muted small mb-2">March 03, 2024</p>
+                <h4 class="fw-bold mb-3 text-dark poetsen-font">We Open The Doors Everyday<br />Come Find Your Next Step</h4>
+                <p class="text-muted mb-0">Explore new lifestyle collections inspired by street culture and soft cushion technology. Meeting all your movement and style needs.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lifestyle Section 2 -->
+    <div class="row g-4 align-items-stretch">
+        <div class="col-lg-7 order-2 order-lg-1">
+            <div class="promo-block light-block h-100 p-4 p-lg-5">
+                <p class="text-uppercase text-muted small mb-2">Sneaker Drop</p>
+                <h4 class="fw-bold mb-3 text-dark poetsen-font">Find the Perfect Pair For Every Day.</h4>
+                <p class="text-muted mb-0">Experience the balance between performance and fashion. Premium materials, minimalist design, perfect for both work and street.</p>
+            </div>
+        </div>
+        <div class="col-lg-5 order-1 order-lg-2">
+            <div class="promo-block dark-block h-100 d-flex align-items-center justify-content-center">
+                <img src="~/images/Adidas_logo.jpg?v=2" alt="Adidas" class="brand-logo-image" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Reviews Section -->
+    @{
+        var shopReviews = ViewBag.ShopReviews as IEnumerable<dynamic>;
+        var reviewsList = shopReviews?.ToList() ?? new List<dynamic>();
+        int totalReviews = reviewsList.Count;
+        double avgRating = totalReviews > 0 ? reviewsList.Average(r => (int)r.Rating) : 0;
+        int count5 = reviewsList.Count(r => (int)r.Rating == 5);
+        int count4 = reviewsList.Count(r => (int)r.Rating == 4);
+        int count3 = reviewsList.Count(r => (int)r.Rating == 3);
+        int count2 = reviewsList.Count(r => (int)r.Rating == 2);
+        int count1 = reviewsList.Count(r => (int)r.Rating == 1);
+    }
+    @if (totalReviews > 0)
+    {
+        <div class="text-center py-4 mt-5 mb-3">
+            <h2 class="text-uppercase fw-bold mb-2 poetsen-font" style="font-size: 1.5rem; letter-spacing: 2px; color: #6c757d;">
+                WHAT OUR CUSTOMERS SAY
+            </h2>
+            <p class="text-muted" style="font-size: 1rem;">Real reviews from our valued customers</p>
+        </div>
+
+        <div class="reviews-outer-wrapper">
+
+            <!-- Rating Summary -->
+            <div class="reviews-summary mb-4">
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                        <div class="avg-rating-number">@avgRating.ToString("0.0")</div>
+                        <div class="avg-rating-stars">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= (int)Math.Round(avgRating))
+                                {
+                                    <i class="bi bi-star-fill"></i>
+                                }
+                                else if (i - avgRating < 1 && i - avgRating > 0)
+                                {
+                                    <i class="bi bi-star-half"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-star"></i>
+                                }
+                            }
+                        </div>
+                        <div class="text-muted mt-1">@totalReviews reviews</div>
+                    </div>
+                    <div class="col-md-8">
+                        @for (int star = 5; star >= 1; star--)
+                        {
+                            int countStar = star switch { 5 => count5, 4 => count4, 3 => count3, 2 => count2, _ => count1 };
+                            double percent = totalReviews > 0 ? (double)countStar / totalReviews * 100 : 0;
+                            <div class="d-flex align-items-center mb-1">
+                                <span class="rating-bar-label">@star <i class="bi bi-star-fill"></i></span>
+                                <div class="rating-bar-track flex-grow-1 mx-2">
+                                    <div class="rating-bar-fill" style="width: @percent.ToString("0")%"></div>
+                                </div>
+                                <span class="rating-bar-count">@countStar</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="reviews-filter mb-4 text-center">
+                <button class="btn btn-outline-secondary btn-sm review-filter-btn active" data-filter="all">All (@totalReviews)</button>
+                <button class="btn btn-outline-secondary btn-sm review-filter-btn" data-filter="5">5 <i class="bi bi-star-fill text-warning"></i> (@count5)</button>
+                <button class="btn btn-outline-secondary btn-sm review-filter-btn" data-filter="4">4 <i class="bi bi-star-fill text-warning"></i> (@count4)</button>
+                <button class="btn btn-outline-secondary btn-sm review-filter-btn" data-filter="3">3 <i class="bi bi-star-fill text-warning"></i> (@count3)</button>
+                <button class="btn btn-outline-secondary btn-sm review-filter-btn" data-filter="2">2 <i class="bi bi-star-fill text-warning"></i> (@count2)</button>
+                <button class="btn btn-outline-secondary btn-sm review-filter-btn" data-filter="1">1 <i class="bi bi-star-fill text-warning"></i> (@count1)</button>
+            </div>
+
+            <!-- All Reviews Grid -->
+            <div class="row g-3 mb-3" id="allReviewsGrid">
+                @foreach (var review in reviewsList)
+                {
+                    string reviewDate = ((DateTime)review.CreatedAt).ToString("dd/MM/yyyy");
+                    string productImg = !string.IsNullOrEmpty((string)review.ProductImage)
+                        ? Url.Content($"~/images/Giay/{review.ProductImage}")
+                        : "";
+                    string productName = (string)review.ProductName ?? "";
+                    int reviewId = (int)review.Id;
+                    int likeCount = (int)review.LikeCount;
+                    int dislikeCount = (int)review.DislikeCount;
+                    bool? userReaction = (bool?)review.CurrentUserReaction;
+                    <div class="col-12 review-item" data-rating="@review.Rating">
+                        <div class="review-card-row" data-review-id="@reviewId">
+                            <!-- Row 1: Avatar + Name + Date -->
+                            <div class="review-row-header">
+                                <div class="review-avatar-sm">
+                                    @{
+                                        string name = review.CustomerName ?? "Customer";
+                                        string initial = name.Length > 0 ? name.Substring(0, 1).ToUpper() : "C";
+                                    }
+                                    @initial
+                                </div>
+                                <span class="review-row-name">@review.CustomerName</span>
+                                <span class="review-row-date">@reviewDate</span>
+                            </div>
+                            <!-- Row 2: Product Image + Stars + Product Name -->
+                            <div class="review-row-middle">
+                                @if (!string.IsNullOrEmpty(productImg))
+                                {
+                                    <img src="@productImg" alt="@productName" class="review-row-product-img" />
+                                }
+                                <div class="review-row-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= (int)review.Rating)
+                                        {
+                                            <i class="bi bi-star-fill"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-star"></i>
+                                        }
+                                    }
+                                </div>
+                                @if (!string.IsNullOrEmpty(productName))
+                                {
+                                    <span class="review-row-product-name">@productName</span>
+                                }
+                            </div>
+                            <!-- Row 3: Comment -->
+                            @if (!string.IsNullOrEmpty((string)review.Comment))
+                            {
+                                <p class="review-row-comment">"@review.Comment"</p>
+                            }
+                            else
+                            {
+                                <p class="review-row-comment review-row-no-comment"><i class="bi bi-emoji-smile me-1"></i>Great experience!</p>
+                            }
+                            <!-- Row 4: Like / Dislike -->
+                            <div class="review-row-actions">
+                                <button class="review-action-btn review-like-btn @(userReaction == true ? "active-like" : "")" onclick="reactReview(this, true)">
+                                    <i class="bi bi-hand-thumbs-up@(userReaction == true ? "-fill" : "")"></i> <span class="review-action-count">@likeCount</span>
+                                </button>
+                                <button class="review-action-btn review-dislike-btn @(userReaction == false ? "active-dislike" : "")" onclick="reactReview(this, false)">
+                                    <i class="bi bi-hand-thumbs-down@(userReaction == false ? "-fill" : "")"></i> <span class="review-action-count">@dislikeCount</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Load More Button -->
+            @if (totalReviews > 6)
+            {
+                <div class="text-center pt-2 pb-1">
+                    <button class="btn btn-outline-dark px-4 py-2" id="loadMoreReviews">
+                        Load more reviews <i class="bi bi-chevron-down ms-1"></i>
+                    </button>
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
+
+<!-- Login Toast -->
+<div class="review-toast-overlay" id="reviewToastOverlay"></div>
+<div class="review-toast" id="reviewToast">
+    <div class="review-toast-icon"><i class="bi bi-lock-fill"></i></div>
+    <p class="review-toast-msg">Please <strong>login</strong> to like or dislike a review.</p>
+</div>
+
+
+<style>
+    .user-home-page {
+        background: #ffffff;
+        padding: 0;
+        margin: -0.5rem auto 0 auto;
+        max-width: 1600px;
+    }
+
+    /* Special Collection Cards (lớn hơn) */
+    .product-card {
+        background: #ffffff;
+        border: 1px solid #dfe3e6;
+        border-radius: 16px;
+        box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+        overflow: hidden;
+        min-height: 600px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+
+    .product-image {
+        height: 430px;
+        background-size: cover;
+        background-position: center;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .product-body {
+        padding: 1.25rem;
+    }
+
+    .product-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-height: 60px;
+        max-height: 60px;
+        line-height: 1.4;
+    }
+
+    /* Latest Products Cards (nhỏ hơn) */
+    .latest-product-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        overflow: hidden;
+        min-height: 350px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .latest-product-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .latest-product-image {
+        height: 250px;
+        background-size: cover;
+        background-position: center;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .latest-product-body {
+        padding: 1rem;
+    }
+
+    .promo-block {
+        border-radius: 12px;
+        padding: 0.25rem;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        min-height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dark-block {
+        background: #f8fafc;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+    .light-block {
+        background: #ffffff;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .brand-logo-image {
+        width: 100%;
+        height: 100%;
+        min-height: 260px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 12px;
+    }
+
+    /* Reviews Outer Wrapper */
+    .reviews-outer-wrapper {
+        background: #eef0f3;
+        border: 1px solid #d5d9df;
+        border-radius: 16px;
+        padding: 1.5rem 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Reviews Summary */
+    .reviews-summary {
+        background: #e4e7eb;
+        border: 1px solid #cdd1d7;
+        border-radius: 12px;
+        padding: 1.5rem 2rem;
+    }
+
+    .avg-rating-number {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #2c3e50;
+        line-height: 1;
+    }
+
+    .avg-rating-stars {
+        color: #f59e0b;
+        font-size: 1.25rem;
+        margin-top: 0.25rem;
+    }
+
+    .rating-bar-label {
+        min-width: 50px;
+        font-size: 0.875rem;
+        color: #495057;
+        text-align: right;
+        font-weight: 500;
+    }
+
+    .rating-bar-label i {
+        color: #f59e0b;
+    }
+
+    .rating-bar-track {
+        height: 10px;
+        background: #d1d5db;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .rating-bar-fill {
+        height: 100%;
+        background: #6c757d;
+        border-radius: 5px;
+        transition: width 0.5s ease;
+    }
+
+    .rating-bar-count {
+        min-width: 30px;
+        font-size: 0.875rem;
+        color: #495057;
+        text-align: left;
+        font-weight: 500;
+    }
+
+    /* Reviews Filter */
+    .reviews-filter .review-filter-btn {
+        margin: 0.2rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        padding: 0.35rem 1rem;
+        transition: all 0.2s;
+        border-color: #adb5bd;
+        color: #495057;
+    }
+
+    .reviews-filter .review-filter-btn.active {
+        background: #343a40;
+        color: #fff;
+        border-color: #343a40;
+    }
+
+    .reviews-filter .review-filter-btn:hover:not(.active) {
+        background: #f1f3f5;
+        border-color: #6c757d;
+    }
+
+    /* Reviews Grid Cards - Horizontal Row Layout */
+    .review-card-row {
+        background: #e0e3e7;
+        border: 1px solid #ced2d8;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .review-card-row:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+
+    .review-item.hidden-review {
+        display: none !important;
+    }
+
+    /* Row 1: Header - Avatar + Name + Date */
+    .review-row-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .review-avatar-sm {
+        width: 28px;
+        height: 28px;
+        background: linear-gradient(135deg, #007bff, #6610f2);
+        color: #fff;
+        font-weight: 700;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .review-row-name {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.85rem;
+    }
+
+    .review-row-date {
+        margin-left: auto;
+        font-size: 0.75rem;
+        color: #6c757d;
+    }
+
+    /* Row 2: Middle - Product Image + Stars + Product Name */
+    .review-row-middle {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .review-row-product-img {
+        width: 36px;
+        height: 36px;
+        border-radius: 6px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 1px solid #bbc0c7;
+    }
+
+    .review-row-rating {
+        color: #f59e0b;
+        font-size: 0.9rem;
+        display: flex;
+        gap: 1px;
+    }
+
+    .review-row-product-name {
+        font-size: 0.8rem;
+        color: #495057;
+        font-weight: 500;
+        margin-left: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
+
+    /* Row 3: Comment */
+    .review-row-comment {
+        font-style: italic;
+        color: #343a40;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .review-row-no-comment {
+        font-style: normal;
+        color: #6c757d;
+    }
+
+    /* Row 4: Like / Dislike Actions */
+    .review-row-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding-top: 0.4rem;
+        border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .review-action-btn {
+        background: none;
+        border: none;
+        color: #6c757d;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    .review-action-btn:hover {
+        background: rgba(0,0,0,0.08);
+        color: #343a40;
+    }
+
+    .review-action-btn.active-like {
+        color: #0d6efd;
+    }
+
+    .review-action-btn.active-dislike {
+        color: #dc3545;
+    }
+
+    .review-action-count {
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    /* Toast Notification */
+    .review-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        background: rgba(0, 0, 0, 0.85);
+        color: #fff;
+        padding: 1.25rem 2rem;
+        border-radius: 14px;
+        font-size: 0.95rem;
+        z-index: 99999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s, transform 0.3s;
+        text-align: center;
+        max-width: 360px;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .review-toast.show {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        pointer-events: auto;
+    }
+
+    .review-toast-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .review-toast-msg {
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .review-toast-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.25);
+        z-index: 99998;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+    }
+
+    .review-toast-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    @@media (max-width: 991.98px) {
+        .user-home-page { padding: 0.1rem; }
+
+        .product-card {
+            min-height: 450px;
+        }
+
+        .product-image {
+            height: 300px;
+        }
+
+        .latest-product-card {
+            min-height: 300px;
+        }
+
+        .latest-product-image {
+            height: 200px;
+        }
+
+        .reviews-summary {
+            padding: 1rem;
+        }
+
+        .avg-rating-number {
+            font-size: 2.5rem;
+        }
+
+        .reviews-outer-wrapper {
+            padding: 1rem;
+        }
+    }
+</style>
+
+@section Scripts {
+<script>
+    var isLoggedIn = @((ViewBag.IsLoggedIn == true).ToString().ToLower());
+
+    function showReviewToast() {
+        var toast = document.getElementById('reviewToast');
+        var overlay = document.getElementById('reviewToastOverlay');
+        toast.classList.add('show');
+        overlay.classList.add('show');
+        setTimeout(function () {
+            toast.classList.remove('show');
+            overlay.classList.remove('show');
+        }, 2500);
+    }
+
+    // Dismiss on overlay click
+    document.getElementById('reviewToastOverlay').addEventListener('click', function () {
+        document.getElementById('reviewToast').classList.remove('show');
+        this.classList.remove('show');
+    });
+
+    function reactReview(btn, isLike) {
+        if (!isLoggedIn) {
+            showReviewToast();
+            return;
+        }
+
+        var card = btn.closest('.review-card-row');
+        var reviewId = parseInt(card.getAttribute('data-review-id'));
+
+        fetch('/Home/ReactReview', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reviewId: reviewId, isLike: isLike })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (!data.success) {
+                showReviewToast();
+                return;
+            }
+
+            var likeBtn = card.querySelector('.review-like-btn');
+            var dislikeBtn = card.querySelector('.review-dislike-btn');
+
+            likeBtn.querySelector('.review-action-count').textContent = data.likeCount;
+            dislikeBtn.querySelector('.review-action-count').textContent = data.dislikeCount;
+
+            likeBtn.classList.remove('active-like');
+            dislikeBtn.classList.remove('active-dislike');
+            likeBtn.querySelector('i').className = 'bi bi-hand-thumbs-up';
+            dislikeBtn.querySelector('i').className = 'bi bi-hand-thumbs-down';
+
+            if (data.userReaction === true) {
+                likeBtn.classList.add('active-like');
+                likeBtn.querySelector('i').className = 'bi bi-hand-thumbs-up-fill';
+            } else if (data.userReaction === false) {
+                dislikeBtn.classList.add('active-dislike');
+                dislikeBtn.querySelector('i').className = 'bi bi-hand-thumbs-down-fill';
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const ITEMS_PER_PAGE = 6;
+        const grid = document.getElementById('allReviewsGrid');
+        const loadMoreBtn = document.getElementById('loadMoreReviews');
+        let currentFilter = 'all';
+        let visibleCount = ITEMS_PER_PAGE;
+
+        function applyVisibility() {
+            const items = grid.querySelectorAll('.review-item');
+            let shown = 0;
+            let totalMatched = 0;
+
+            items.forEach(function (item) {
+                const rating = item.getAttribute('data-rating');
+                const matches = currentFilter === 'all' || rating === currentFilter;
+
+                if (matches) {
+                    totalMatched++;
+                    if (shown < visibleCount) {
+                        item.classList.remove('hidden-review');
+                        shown++;
+                    } else {
+                        item.classList.add('hidden-review');
+                    }
+                } else {
+                    item.classList.add('hidden-review');
+                }
+            });
+
+            if (loadMoreBtn) {
+                loadMoreBtn.style.display = shown < totalMatched ? '' : 'none';
+            }
+        }
+
+        // Initial load - show first 6
+        applyVisibility();
+
+        // Filter buttons
+        document.querySelectorAll('.review-filter-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.review-filter-btn').forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter');
+                visibleCount = ITEMS_PER_PAGE;
+                applyVisibility();
+            });
+        });
+
+        // Load More
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function () {
+                visibleCount += ITEMS_PER_PAGE;
+                applyVisibility();
+            });
+        }
+    });
+</script>
+}

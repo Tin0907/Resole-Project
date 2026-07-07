@@ -1,0 +1,359 @@
+﻿/* ===== RESET ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== BACKGROUND FULL SCREEN - ẢNH GIÀY FULL MÀN HÌNH ===== */
+body {
+    background: linear-gradient(135deg, rgba(10, 22, 40, 0.85) 0%, rgba(26, 40, 71, 0.75) 50%, rgba(13, 27, 42, 0.85) 100%),
+                url('/images/shoe.jpg') no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Overlay tối để làm nổi form */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(10, 22, 40, 0.6) 0%, rgba(26, 40, 71, 0.4) 100%);
+    z-index: 1;
+}
+
+/* ===== TẮT HEADER / NAV ===== */
+header,
+.navbar,
+.top-bar {
+    display: none !important;
+}
+
+/* ===== CONTAINER LOGIN ===== */
+.container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+    z-index: 10;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* ===== CARD LOGIN/REGISTER - GLASS MORPHISM ===== */
+.card {
+  
+    width: 440px;
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    color: #f8fafc;
+    overflow: hidden;
+}
+
+.card.shadow-lg {
+    margin: 0 auto;
+}
+/* ===== CARD HEADER ===== */
+.card-header {
+    background: transparent !important;
+    border: none !important;
+    padding: 35px 30px 15px;
+    text-align: center;
+}
+
+.card-header h3 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.card-header p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+}
+
+.card-header i {
+    font-size: 42px;
+    color: #fbbf24;
+    margin-bottom: 12px;
+}
+
+/* ===== CARD BODY ===== */
+.card-body {
+    padding: 20px 32px 35px;
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar */
+.card-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.card-body::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+    background: rgba(251, 191, 36, 0.3);
+    border-radius: 10px;
+}
+
+.card-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(251, 191, 36, 0.5);
+}
+
+/* ===== FORM GROUP ===== */
+.mb-3 {
+    margin-bottom: 20px;
+}
+
+.mb-4 {
+    margin-bottom: 25px;
+}
+
+/* ===== LABEL ===== */
+.form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 6px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-label i {
+    margin-right: 6px;
+    color: #fbbf24;
+    font-size: 13px;
+}
+
+/* ===== INPUT FIELDS ===== */
+.form-control {
+    background: transparent !important;
+    border: none;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0;
+    color: #fff !important;
+    padding: 10px 0;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 13px;
+}
+
+.form-control:focus {
+    background: transparent !important;
+    border-bottom: 2px solid #fbbf24;
+    box-shadow: none !important;
+    outline: none;
+}
+
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus {
+    -webkit-text-fill-color: #fff !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(30, 41, 59, 0.7) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ===== BUTTON ===== */
+.btn {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    border: none;
+    border-radius: 25px;
+    color: #0a1628 !important;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 13px 0;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(251, 191, 36, 0.45);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+/* ===== LINKS ===== */
+a {
+    color: #fbbf24;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #fcd34d;
+    text-decoration: underline;
+}
+
+/* ===== ALERT ===== */
+.alert {
+    background: rgba(239, 68, 68, 0.18);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 12px;
+    color: #fecaca;
+    font-size: 12px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+}
+
+.alert-success {
+    background: rgba(34, 197, 94, 0.18);
+    border-color: rgba(34, 197, 94, 0.35);
+    color: #bbf7d0;
+}
+
+.alert i {
+    margin-right: 6px;
+}
+
+.alert ul {
+    margin: 6px 0 0 0;
+    padding-left: 18px;
+    font-size: 11px;
+}
+
+.alert li {
+    margin: 3px 0;
+}
+
+/* ===== TEXT FOOTER ===== */
+.text-center {
+    text-align: center;
+}
+
+.text-white {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 12px;
+}
+
+.small {
+    font-size: 12px;
+}
+
+/* ===== LOGO / BRAND ===== */
+.logo-brand {
+    position: absolute;
+    top: 32px;
+    right: 36px;
+    z-index: 12;
+}
+
+.logo-brand span {
+    color: #fbbf24;
+}
+
+.logo-brand-img {
+  height: 140px;
+  width: auto;
+  display: block;
+}
+
+/* ===== VALIDATION ERRORS ===== */
+.text-danger {
+    color: #fca5a5 !important;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+    .container {
+        padding-left: 5%;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow: auto;
+        background-attachment: scroll;
+    }
+
+    .container {
+        padding: 15px;
+        justify-content: center;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 420px;
+        margin: 20px auto;
+    }
+
+    .logo-brand {
+        position: static;
+        text-align: center;
+        padding: 20px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        border-radius: 18px !important;
+    }
+
+    .card-header h3 {
+        font-size: 22px;
+    }
+
+    .card-header p {
+        font-size: 12px;
+    }
+
+    .card-body {
+        padding: 18px 24px 30px;
+    }
+
+    .form-label {
+        font-size: 11px;
+    }
+
+    .form-control {
+        font-size: 13px;
+        padding: 8px 0;
+    }
+
+    .btn {
+        font-size: 13px;
+        padding: 11px 0;
+    }
+}

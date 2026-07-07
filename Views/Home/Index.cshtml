@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="mb-0 fw-bold text-primary">
+            <i class="bi bi-speedometer2 me-2"></i>Shoe Sales Dashboard
+        </h1>
+        <p class="text-muted small">Welcome to ReSole management system</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Card Product -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm border-0 rounded-3 h-100 admin-card-dark">
+            <div class="card-body text-center p-4">
+                <div class="display-1 mb-3" style="color: #1a1a2e;">
+                    <i class="bi bi-basket3"></i>
+                </div>
+                <h6 class="card-title fw-bold">Product Management</h6>
+                <p class="text-muted small mb-3">Manage shoe inventory</p>
+                <a href="@Url.Action("Index", "Giay")" class="btn btn-dark btn-sm w-100">
+                    <i class="bi bi-arrow-right me-1"></i>View Details
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Customer -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm border-0 rounded-3 h-100 admin-card-cyan">
+            <div class="card-body text-center p-4">
+                <div class="display-1 mb-3" style="color: #17a2b8;">
+                    <i class="bi bi-people"></i>
+                </div>
+                <h6 class="card-title fw-bold">Customer Management</h6>
+                <p class="text-muted small mb-3">Customer information</p>
+                <a href="@Url.Action("Index", "Khachhang")" class="btn btn-info btn-sm w-100">
+                    <i class="bi bi-arrow-right me-1"></i>View Details
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Order -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm border-0 rounded-3 h-100 admin-card-yellow">
+            <div class="card-body text-center p-4">
+                <div class="display-1 mb-3" style="color: #ffc107;">
+                    <i class="bi bi-bag-check"></i>
+                </div>
+                <h6 class="card-title fw-bold">Order Management</h6>
+                <p class="text-muted small mb-3">Manage shoe orders</p>
+                <a href="@Url.Action("Index", "Donhang")" class="btn btn-warning btn-sm w-100">
+                    <i class="bi bi-arrow-right me-1"></i>View Details
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Administrator -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm border-0 rounded-3 h-100 admin-card-red">
+            <div class="card-body text-center p-4">
+                <div class="display-1 mb-3" style="color: #dc3545;">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <h6 class="card-title fw-bold">Admin Management</h6>
+                <p class="text-muted small mb-3">Manage admin accounts</p>
+                <a href="@Url.Action("Index", "NguoiDung")" class="btn btn-danger btn-sm w-100">
+                    <i class="bi bi-arrow-right me-1"></i>View Details
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-light py-3">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-graph-up me-2"></i>System Statistics
+                </h6>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted">Shoe Sales Management System - Version 1.0</p>
+                <p class="text-muted small mb-0">© 2025 - All rights reserved</p>
+            </div>
+        </div>
+    </div>
+</div>

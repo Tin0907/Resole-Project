@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ASM.Models.DonhangChitiet>
+
+<div class="table-responsive">
+    <table class="table table-hover mb-0">
+        <thead class="table-light border-bottom">
+            <tr>
+                <th class="fw-bold text-muted small text-uppercase">Shoe Name</th>
+                <th class="fw-bold text-muted small text-uppercase">Image</th>
+                <th class="fw-bold text-muted small text-uppercase">Quantity</th>
+                <th class="fw-bold text-muted small text-uppercase">Subtotal</th>
+                <th class="fw-bold text-muted small text-uppercase">Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr class="align-middle">
+                        <td class="fw-bold">@Html.DisplayFor(modelItem => item.Giay.Ten)</td>
+                        <td>
+                            <img src="~/images/Giay/@item.Giay.Hinh" class="img-thumbnail rounded" style="width:80px; height:80px; object-fit:cover;" alt="@item.Giay.Ten" />
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark">@Html.DisplayFor(modelItem => item.SoLuong)</span>
+                        </td>
+                        <td class="fw-bold text-success">@Html.DisplayFor(modelItem => item.ThanhTien)</td>
+                        <td>@Html.DisplayFor(modelItem => item.GhiChu)</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-3">
+                        <i class="bi bi-inbox me-2"></i>No details available
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

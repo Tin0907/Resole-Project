@@ -1,0 +1,72 @@
+﻿@using ASM.Models
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Extensions
+@using ASM.Constants
+
+@{
+    // Check Admin login
+    string userName = Context.Session.GetString(SessionKey.NguoiDung.Username);
+    
+    // Check Customer login
+    string khEmail = Context.Session.GetString(SessionKey.KhachHang.KH_Email);
+    
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+@if (!string.IsNullOrEmpty(userName))
+{
+    <!-- Menu for Admin -->
+    <li class="nav-item">
+        <a class="nav-link menu-link @(currentController == "Admin" ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Index">
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link menu-link @(currentController == "Nguoidung" ? "active" : "")" asp-area="" asp-controller="Nguoidung" asp-action="Index">
+            <i class="bi bi-person-badge me-1"></i> Administrators
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link menu-link @(currentController == "Giay" ? "active" : "")" asp-area="" asp-controller="Giay" asp-action="Index">
+            <i class="bi bi-basket3 me-1"></i> Shoes
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link menu-link @(currentController == "Donhang" ? "active" : "")" asp-area="" asp-controller="Donhang" asp-action="Index">
+            <i class="bi bi-bag-check me-1"></i> Orders
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link menu-link @(currentController == "Khachhang" ? "active" : "")" asp-area="" asp-controller="Khachhang" asp-action="Index">
+            <i class="bi bi-people me-1"></i> Customers
+        </a>
+    </li>
+}
+else if (!string.IsNullOrEmpty(khEmail))
+{
+    <!-- Menu for Customer (view only) -->
+    <li class="nav-item">
+        <a class="nav-link menu-link @(currentController == "Home" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-house-door me-1"></i> Home
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link menu-link @(currentController == "ThucDon" ? "active" : "")" asp-area="" asp-controller="ThucDon" asp-action="Index">
+            <i class="bi bi-card-list me-1"></i> Menu
+        </a>
+    </li>
+}
+else
+{
+    <!-- Menu for guest -->
+    <li class="nav-item">
+        <a class="nav-link menu-link @(currentController == "Home" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-house-door me-1"></i> Home
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link menu-link @(currentController == "ThucDon" ? "active" : "")" asp-area="" asp-controller="ThucDon" asp-action="Index">
+            <i class="bi bi-card-list me-1"></i> Menu
+        </a>
+    </li>
+}

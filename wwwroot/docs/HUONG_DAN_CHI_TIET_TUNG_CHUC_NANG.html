@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hý?ng D?n Chi Ti?t Các Ch?c Nãng - ReSole</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .document {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .title {
+            text-align: center;
+            color: #111827;
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            border-bottom: 3px solid #111827;
+            padding-bottom: 20px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .toc-section {
+            background: #f0f4f8;
+            border-left: 4px solid #111827;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #111827;
+            font-size: 2em;
+            margin: 40px 0 20px;
+            border-bottom: 2px solid #111827;
+            padding-bottom: 10px;
+            page-break-before: always;
+        }
+
+        h2 {
+            color: #0f172a;
+            font-size: 1.5em;
+            margin: 30px 0 15px;
+            border-left: 4px solid #0f172a;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #1f2937;
+            font-size: 1.2em;
+            margin: 20px 0 10px;
+        }
+
+        h4 {
+            color: #374151;
+            font-size: 1.05em;
+            margin: 15px 0 8px;
+            font-weight: 600;
+        }
+
+        p {
+            margin: 10px 0;
+            text-align: justify;
+            color: #4b5563;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+            color: #4b5563;
+        }
+
+        li {
+            margin: 8px 0;
+            line-height: 1.8;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d73a49;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #f8f9fa;
+            border-left: 4px solid #111827;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+
+        .step-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        tr:hover {
+            background: #f3f4f6;
+        }
+
+        .flow-chart {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 0.9em;
+            line-height: 2;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #111827;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin: 2px;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+
+        .page-break {
+            page-break-after: always;
+            margin: 40px 0;
+        }
+
+        .footer {
+            border-top: 2px solid #e5e7eb;
+            margin-top: 50px;
+            padding-top: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .document {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            h1 {
+                page-break-before: always;
+            }
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="document">
+        <!-- Header -->
+        <div class="title">?? Hý?ng D?n Chi Ti?t T?ng Ch?c Nãng</div>
+        <div class="subtitle">ReSole Sneaker Shop - Phiên B?n 2.0</div>
+        <div class="subtitle" style="font-size: 0.9em; color: #999;">C?p nh?t: 2025 | Phiên b?n: 2.0 | Tr?ng thái: ? Hoàn thành</div>
+
+        <!-- M?c l?c -->
+        <div class="toc-section">
+            <h3>?? M?c L?c</h3>
+            <ol>
+                <li>Chu?n B? Môi Trý?ng</li>
+                <li>Xây D?ng Cõ S? D? Li?u</li>
+                <li>T?o Models & Services</li>
+                <li>Xây D?ng Controllers</li>
+                <li>T?o Views & Layouts</li>
+                <li>Tính Nãng Gi? Hàng</li>
+                <li>Thanh Toán & Ð?t Hàng</li>
+                <li>Qu?n L? Admin</li>
+                <li>Styling & UX</li>
+                <li>Helpers & Utilities</li>
+            </ol>
+        </div>
+
+        <!-- PH?N 1 -->
+        <h1><span class="emoji">??</span>1. CHU?N B? MÔI TRÝ?NG</h1>
+
+        <h2>Bý?c 1: T?o Project</h2>
+        <pre>dotnet new webapp -n ReSole -f net8.0
+cd ReSole</pre>
+
+        <h2>Bý?c 2: Cài Ð?t NuGet Packages</h2>
+        <pre>dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Microsoft.EntityFrameworkCore.Design</pre>
+
+        <h2>Bý?c 3: C?u H?nh appsettings.json</h2>
+        <pre>{
+  "ConnectionStrings": {
+    "defaultConnection": "Server=(localdb)\\mssqllocaldb;Database=ReSole_DB;Trusted_Connection=True"
+  }
+}</pre>
+
+        <h2>Bý?c 4: C?u H?nh Program.cs</h2>
+        <div class="step-box">
+            <strong>Các bý?c chính:</strong>
+            <ol>
+                <li>Thêm DbContext</li>
+                <li>Thêm Controllers & Views</li>
+                <li>Ðãng k? Services (Dependency Injection)</li>
+                <li>Thêm Session</li>
+                <li>C?u h?nh Middleware</li>
+            </ol>
+        </div>
+
+        <!-- PH?N 2 -->
+        <h1><span class="emoji">???</span>2. XÂY D?NG CÕ S? D? LI?U</h1>
+
+        <h2>Bý?c 1: T?o 6 Models Chính</h2>
+
+        <h3>?? Model 1: Giay (S?n Ph?m)</h3>
+        <table>
+            <tr>
+                <th>Tên Trý?ng</th>
+                <th>Ki?u D? Li?u</th>
+                <th>Mô T?</th>
+            </tr>
+            <tr>
+                <td>Id</td>
+                <td>int</td>
+                <td>Primary Key, Auto Increment</td>
+            </tr>
+            <tr>
+                <td>Ten</td>
+                <td>string</td>
+                <td>Tên s?n ph?m (max 100)</td>
+            </tr>
+            <tr>
+                <td>Gia</td>
+                <td>float</td>
+                <td>Giá ti?n</td>
+            </tr>
+            <tr>
+                <td>PhanLoai</td>
+                <td>int</td>
+                <td>1=GiayDa, 2=GiaySneaker, 3=GiayTheThao, 4=SpecialShoe</td>
+            </tr>
+            <tr>
+                <td>Hinh</td>
+                <td>string</td>
+                <td>Tên file h?nh ?nh</td>
+            </tr>
+            <tr>
+                <td>TrangThai</td>
+                <td>bool</td>
+                <td>true=C?n hàng, false=H?t hàng</td>
+            </tr>
+        </table>
+
+        <h3>?? Model 2: Khachhang (Khách Hàng)</h3>
+        <table>
+            <tr>
+                <th>Tên Trý?ng</th>
+                <th>Ki?u D? Li?u</th>
+                <th>Constraints</th>
+            </tr>
+            <tr>
+                <td>Id</td>
+                <td>int</td>
+                <td>PK, Auto Increment</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>string</td>
+                <td>UNIQUE</td>
+            </tr>
+            <tr>
+                <td>MatKhau</td>
+                <td>string</td>
+                <td>M? hóa MD5</td>
+            </tr>
+        </table>
+
+        <h3>?? Model 3: Donhang (Ðõn Hàng)</h3>
+        <ul>
+            <li><strong>KhachHangId:</strong> Foreign Key ? Khachhangs</li>
+            <li><strong>NgayDat:</strong> DateTime (m?c ð?nh NOW)</li>
+            <li><strong>TongTien:</strong> Decimal (lýu giá c? ð?nh)</li>
+            <li><strong>TrangThai:</strong> String (Pending, Processing, Shipping, Completed, Cancelled)</li>
+        </ul>
+
+        <h3>?? Model 4: Cart (Gi? Hàng)</h3>
+        <ul>
+            <li><strong>KhachHangId:</strong> FK ? Khachhangs</li>
+            <li><strong>GiayId:</strong> FK ? MonAns</li>
+            <li><strong>Size:</strong> String (39-43)</li>
+            <li><strong>SoLuong:</strong> int (m?c ð?nh 1)</li>
+        </ul>
+
+        <h2>Bý?c 2: T?o DataContext</h2>
+        <pre>public class DataContext : DbContext
+{
+    public DbSet&lt;Giay&gt; MonAns { get; set; }
+    public DbSet&lt;Khachhang&gt; Khachhangs { get; set; }
+    public DbSet&lt;Donhang&gt; Donhangs { get; set; }
+    public DbSet&lt;Cart&gt; Carts { get; set; }
+    // ...
+}</pre>
+
+        <h2>Bý?c 3: Create & Update Database</h2>
+        <pre>dotnet ef migrations add InitialCreate
+dotnet ef database update</pre>
+
+        <div class="success-box">
+            <strong>? K?t qu?:</strong> Database ReSole_DB ðý?c t?o v?i 6 b?ng: MonAns, Khachhangs, Nguoidungs, Donhangs, DonhangChitiets, Carts
+        </div>
+
+        <!-- PH?N 3 -->
+        <h1><span class="emoji">???</span>3. T?O MODELS & SERVICES</h1>
+
+        <h2>Quy Tr?nh T?o Service</h2>
+        <div class="diagram">
+1. T?o Interface (IGiaySvc)
+   ?
+2. T?o Implementation (GiaySvc)
+   ?
+3. Implement CRUD Methods
+   - GetAll()
+   - Get(id)
+   - Add(entity)
+   - Update(entity)
+   - Delete(id)
+   ?
+4. Ðãng k? trong Program.cs
+   builder.Services.AddTransient&lt;IGiaySvc, GiaySvc&gt;()
+   ?
+5. Inject vào Controller
+   public GiayController(IGiaySvc giaySvc)
+        </div>
+
+        <h3>Ví d?: GiaySvc</h3>
+        <pre>public interface IGiaySvc
+{
+    List&lt;Giay&gt; GetAll();
+    Giay Get(int id);
+    List&lt;Giay&gt; GetByCategory(int phanLoai);
+    void Add(Giay giay);
+    void Update(Giay giay);
+    void Delete(int id);
+}</pre>
+
+        <h3>Ví d?: CartSvc (Quan tr?ng)</h3>
+        <pre>public interface ICartSvc
+{
+    List&lt;Cart&gt; GetCartByKhachHangId(int khachHangId);
+    Cart GetByKhachHangIdAndGiayId(int khachHangId, int giayId, string size);
+    int GetCartCount(int khachHangId);
+    void Add(Cart cart);
+    void Update(Cart cart);
+    void DeleteByKhachHangIdAndGiayId(int khachHangId, int giayId, string size);
+    void ClearCart(int khachHangId);
+}</pre>
+
+        <div class="warning-box">
+            <strong>?? Lýu ? quan tr?ng:</strong>
+            <ul>
+                <li><span class="highlight">.Include(c => c.Giay)</span> ð? eager loading s?n ph?m</li>
+                <li>GetByKhachHangIdAndGiayId ph?i check c? <span class="highlight">Size</span></li>
+                <li>Luôn g?i <span class="highlight">SaveChanges()</span> sau m?i thay ð?i</li>
+            </ul>
+        </div>
+
+        <!-- PH?N 4 -->
+        <h1><span class="emoji">??</span>4. XÂY D?NG CONTROLLERS</h1>
+
+        <h2>HomeController - Trang Ch?</h2>
+        <pre>public IActionResult UserHome()
+{
+    // 1. L?y s?n ph?m ð?c bi?t (PhanLoai = 4)
+    var specialCollection = _giaySvc.GetByCategory(4);
+    
+    // 2. L?y 4 s?n ph?m m?i nh?t
+    var allProducts = _giaySvc.GetAll()
+        .Where(g => g.PhanLoai != 4)
+        .OrderByDescending(g => g.Id)
+        .Take(4)
+        .ToList();
+
+    ViewBag.SpecialCollection = specialCollection;
+    ViewBag.LatestProducts = allProducts;
+
+    return View();
+}</pre>
+
+        <h2>CartController - Gi? Hàng</h2>
+        <div class="step-box">
+            <strong>Các Actions chính:</strong>
+            <ul>
+                <li><code>Index()</code> - Xem gi? hàng</li>
+                <li><code>Add([FromBody])</code> - Thêm vào gi? (AJAX)</li>
+                <li><code>UpdateQuantity([FromBody])</code> - C?p nh?t s? lý?ng</li>
+                <li><code>Remove([FromBody])</code> - Xóa kh?i gi?</li>
+                <li><code>Clear()</code> - Xóa toàn b?</li>
+                <li><code>GetCount()</code> - L?y s? lý?ng (cho badge)</li>
+            </ul>
+        </div>
+
+        <!-- PH?N 5 -->
+        <h1><span class="emoji">??</span>5. T?O VIEWS & LAYOUTS</h1>
+
+        <h2>_WebLayout.cshtml (Layout Chính)</h2>
+        <h3>Các thành ph?n:</h3>
+        <ul>
+            <li>? Sticky Navbar (c? ð?nh khi scroll)</li>
+            <li>? Navigation menu (Home, Shop, About, Contact)</li>
+            <li>? Cart Badge (hi?n th? s? lý?ng)</li>
+            <li>? User Menu (dropdown login/profile)</li>
+            <li>? Footer (liên h?, links)</li>
+            <li>? Bootstrap responsive grid</li>
+        </ul>
+
+        <h2>Giay/Index.cshtml (Danh Sách S?n Ph?m)</h2>
+        <div class="success-box">
+            <strong>Tính nãng:</strong>
+            <ul>
+                <li>Grid layout (responsive)</li>
+                <li>Product cards (image, title, price, status)</li>
+                <li>Hover effects (card n?i lên, image zoom)</li>
+                <li>Favorite icon (toggle class)</li>
+                <li>View Details link</li>
+            </ul>
+        </div>
+
+        <h2>Giay/Details.cshtml (Chi Ti?t S?n Ph?m)</h2>
+        <div class="diagram">
+?? H?nh ?nh (500x500px)
+?
+?? Tên + Giá
+?
+?? Mô t? ð?y ð?
+?
+?? Ch?n Size (Radio buttons 39-43)
+?
+?? Nh?p s? lý?ng (Input number)
+?
+?? 2 Buttons:
+   ?? "Thêm Vào Gi?" (AJAX)
+   ?? "Mua Ngay" (thanh toán ngay)
+        </div>
+
+        <!-- PH?N 6 -->
+        <h1><span class="emoji">??</span>6. TÍNH NÃNG GI? HÀNG</h1>
+
+        <h2>Flow: Thêm Vào Gi?</h2>
+        <div class="flow-chart">
+1. User ch?n Size + S? lý?ng
+2. Nh?n "Thêm Vào Gi?"
+3. JavaScript g?i AJAX POST /Cart/Add
+   {giayId: 1, size: "42", quantity: 2}
+4. CartController.Add() x? l?:
+   a. Ki?m tra Session (login)
+   b. Ki?m tra s?n ph?m t?n t?i
+   c. T?m item cùng size trong DB
+   d. N?u có ? C?ng s? lý?ng
+   e. N?u không ? Thêm record m?i
+5. Return JSON {success: true, cartCount: 5}
+6. JavaScript c?p nh?t:
+   - Cart badge (s? 5)
+   - Hi?n th? thông báo
+7. ? Hoàn t?t
+        </div>
+
+        <h2>Quy Tr?nh C?p Nh?t Gi?</h2>
+        <table>
+            <tr>
+                <th>Thao Tác</th>
+                <th>Input</th>
+                <th>Logic</th>
+                <th>Output</th>
+            </tr>
+            <tr>
+                <td>Update Quantity</td>
+                <td>cartId, newQty</td>
+                <td>N?u qty > 0: Update<br>N?u qty = 0: Delete</td>
+                <td>success: true</td>
+            </tr>
+            <tr>
+                <td>Remove Item</td>
+                <td>giayId, size</td>
+                <td>Delete b?ng composite key</td>
+                <td>success: true</td>
+            </tr>
+            <tr>
+                <td>Clear All</td>
+                <td>khachHangId</td>
+                <td>DELETE WHERE KhachHangId = @id</td>
+                <td>success: true</td>
+            </tr>
+        </table>
+
+        <!-- PH?N 7 -->
+        <h1><span class="emoji">??</span>7. THANH TOÁN & Ð?T HÀNG</h1>
+
+        <h2>Flow: Checkout</h2>
+        <div class="flow-chart">
+1. User ? /Cart/Index
+2. Nh?n "Checkout"
+3. Redirect ? /Checkout/Index
+4. CheckoutController.Index():
+   - Load Session (KH_Id)
+   - Load Carts t? DB
+   - Tính TongTien = sum(price × qty)
+   - Hi?n th? form + ðõn hàng tóm t?t
+5. User ði?n thông tin:
+   - H? tên
+   - Email
+   - SÐT
+   - Ð?a ch? giao hàng
+6. Nh?n "Ð?t Hàng"
+7. POST /Checkout/PlaceOrder:
+   a. Validate d? li?u
+   b. T?o record Donhang
+   c. T?o DonhangChitiet cho m?i s?n ph?m
+   d. Xóa toàn b? Carts
+   e. Commit transaction
+8. Redirect ? /Checkout/Success
+9. Hi?n th?:
+   - "C?m õn b?n ð? ð?t hàng"
+   - M? ðõn hàng
+   - Link xem ðõn hàng
+10. ? Hoàn t?t
+        </div>
+
+        <div class="warning-box">
+            <strong>?? Quan tr?ng:</strong>
+            <ul>
+                <li><strong>DonGia:</strong> Lýu giá t?i th?i ði?m mua (không dùng giá hi?n t?i)</li>
+                <li><strong>Xóa Cart:</strong> Ph?i xóa t?t c? items c?a khách sau khi t?o ðõn</li>
+                <li><strong>TempData:</strong> Dùng ð? truy?n OrderId sang Success page</li>
+            </ul>
+        </div>
+
+        <!-- PH?N 8 -->
+        <h1><span class="emoji">??</span>8. QU?N L? ADMIN</h1>
+
+        <h2>Authentication Flow</h2>
+        <div class="diagram">
+User ? /Admin/Login
+  ?
+Nh?p Username + Password
+  ?
+AdminController.Login():
+  a. T?m user theo username
+  b. Validate: password == MD5(input)
+  c. Lýu Session:
+     - ND_Username
+     - ND_HoTen
+  ?
+Redirect ? /Admin/Index
+  ?
+[AuthenticationFilter] check Session
+  ?? N?u có: Cho phép truy c?p
+  ?? N?u không: Redirect sang Login
+  ?
+? Admin dashboard
+        </div>
+
+        <h2>Giay Controller - CRUD Admin</h2>
+        <table>
+            <tr>
+                <th>Action</th>
+                <th>URL</th>
+                <th>Method</th>
+                <th>Mô T?</th>
+            </tr>
+            <tr>
+                <td>Index</td>
+                <td>/Giay/Index</td>
+                <td>GET</td>
+                <td>Danh sách s?n ph?m (table)</td>
+            </tr>
+            <tr>
+                <td>Create</td>
+                <td>/Giay/Create</td>
+                <td>GET/POST</td>
+                <td>Form + Upload ?nh</td>
+            </tr>
+            <tr>
+                <td>Edit</td>
+                <td>/Giay/Edit/{id}</td>
+                <td>GET/POST</td>
+                <td>Update s?n ph?m</td>
+            </tr>
+            <tr>
+                <td>Delete</td>
+                <td>/Giay/Delete/{id}</td>
+                <td>POST</td>
+                <td>Xóa + Xóa ?nh</td>
+            </tr>
+        </table>
+
+        <!-- PH?N 9 -->
+        <h1><span class="emoji">??</span>9. STYLING & UX</h1>
+
+        <h2>CSS Chính (site.css)</h2>
+        <h3>Sticky Navbar</h3>
+        <pre>.rs-sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: linear-gradient(135deg, rgba(7,12,24,0.95) 0%, rgba(18,26,44,0.9) 100%);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}</pre>
+
+        <h3>Product Cards</h3>
+        <pre>.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}</pre>
+
+        <h2>Toast Notifications</h2>
+        <pre>function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.remove(), 3000);
+}</pre>
+
+        <!-- PH?N 10 -->
+        <h1><span class="emoji">???</span>10. HELPERS & UTILITIES</h1>
+
+        <h2>MahoaHelper - MD5 Hashing</h2>
+        <pre>public string MaHoaMD5(string input)
+{
+    using (MD5 md5 = MD5.Create())
+    {
+        byte[] inputBytes = Encoding.ASCII.GetBytes(input);
+        byte[] hashBytes = md5.ComputeHash(inputBytes);
+        
+        StringBuilder sb = new StringBuilder();
+        foreach (byte b in hashBytes)
+        {
+            sb.Append(b.ToString("X2"));
+        }
+        return sb.ToString();
+    }
+}</pre>
+
+        <h2>UploadHelper - Upload H?nh ?nh</h2>
+        <pre>public async Task&lt;string&gt; UploadImage(IFormFile file, string folder)
+{
+    // 1. T?o tên file unique (GUID)
+    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+    
+    // 2. T?o ðý?ng d?n
+    var path = Path.Combine("wwwroot/images", folder, fileName);
+    
+    // 3. T?o thý m?c
+    Directory.CreateDirectory(Path.GetDirectoryName(path));
+    
+    // 4. Upload file async
+    using (var stream = new FileStream(path, FileMode.Create))
+    {
+        await file.CopyToAsync(stream);
+    }
+    
+    // 5. Tr? tên file
+    return fileName;
+}</pre>
+
+        <div class="success-box">
+            <strong>? L?i ích:</strong>
+            <ul>
+                <li>GUID ð?m b?o tên file không trùng</li>
+                <li>T? ch?c file theo folder (Giay, ...)</li>
+                <li>Async upload ð? không block thread</li>
+                <li>Cross-platform path handling</li>
+            </ul>
+        </div>
+
+        <!-- TÓMO T?T -->
+        <h1>?? TÓMO T?T QUY TR?NH</h1>
+
+        <h2>Quy Tr?nh 1: Mua Hàng</h2>
+        <div class="diagram">
+Ch?n S?n Ph?m
+  ?
+Ch?n Size + S? Lý?ng
+  ?
+Nh?n "Thêm Vào Gi?"
+  ?
+AJAX ? /Cart/Add
+  ?? Check login
+  ?? Check product
+  ?? Check duplicate (size)
+  ?? Add ho?c Update DB
+  ?? Return {success: true, cartCount: 5}
+  ?
+JavaScript:
+  ?? Update badge
+  ?? Show toast
+  ?? Reload cart
+  ?
+? Thành công
+        </div>
+
+        <h2>Quy Tr?nh 2: Thanh Toán</h2>
+        <div class="diagram">
+Xem Gi? Hàng
+  ?
+Nh?n "Checkout"
+  ?
+GET /Checkout/Index
+  ?? Load carts
+  ?? Tính t?ng ti?n
+  ?? Hi?n th? form
+  ?
+Ði?n thông tin giao hàng
+  ?
+POST /Checkout/PlaceOrder
+  ?? Validate
+  ?? Create Donhang
+  ?? Create DonhangChitiet (m?i s?n ph?m)
+  ?? Delete Carts
+  ?? Commit transaction
+  ?
+GET /Checkout/Success
+  ?? Hi?n th? m? ðõn
+  ?? C?m õn khách hàng
+  ?? Link xem ðõn hàng
+  ?
+? Thành công
+        </div>
+
+        <h2>Quy Tr?nh 3: Admin CRUD</h2>
+        <div class="diagram">
+GET /Admin/Login
+  ?
+POST Login (username + password)
+  ?? Validate MD5
+  ?? Set Session
+  ?? Redirect /Admin/Index
+  ?
+[AuthenticationFilter] check
+  ?? Có Session: Cho phép
+  ?? Không: Redirect Login
+  ?
+GET /Giay/Index
+  ?? Load t?t c? s?n ph?m
+  ?? Hi?n th? table
+  ?
+Actions: Create/Edit/Delete
+  ?? Upload ?nh (n?u có)
+  ?? Validate
+  ?? Update DB
+  ?? TempData["success"]
+  ?
+Redirect /Giay/Index
+  ?
+? Thành công
+        </div>
+
+        <!-- Checklist -->
+        <h1>? CHECKLIST IMPLEMENTATION</h1>
+
+        <table>
+            <tr>
+                <th>Bý?c</th>
+                <th>Tên</th>
+                <th>Tr?ng Thái</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Chu?n B? Môi Trý?ng (appsettings, Program.cs)</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>T?o 6 Models</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>T?o DataContext</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Migration & Database</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>T?o 6 Services</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>T?o Controllers (Home, Giay, Cart, Checkout, Admin)</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>T?o Views & Layouts</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Implement AJAX (Add to Cart, Update Qty)</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Implement Checkout Flow</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Implement Admin (Auth, CRUD)</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>CSS & Styling</td>
+                <td>?</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>Helpers (Mahoa, Upload, Cart)</td>
+                <td>?</td>
+            </tr>
+        </table>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>ReSole Sneaker Shop v2.0</strong></p>
+            <p>Hý?ng D?n Chi Ti?t Xây D?ng & Th?c Hi?n Các Ch?c Nãng</p>
+            <p>© 2025. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

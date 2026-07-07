@@ -1,0 +1,811 @@
+﻿@model ASM.Models.ViewModels.KhachHangProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_WebLayout";
+}
+
+<!-- CSS Styling -->
+<style>
+    .profile-page {
+        min-height: calc(100vh - 200px);
+        padding: 2rem 0;
+        background: #f8f9fa;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 20px 20px 0 0;
+        margin-bottom: 0;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 3.5rem;
+        color: #667eea;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+
+    .profile-name {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-email {
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+
+    .profile-nav {
+        background: white;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .profile-nav .nav-link {
+        color: #6c757d;
+        font-weight: 600;
+        padding: 1rem 1.5rem;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .profile-nav .nav-link:hover,
+    .profile-nav .nav-link.active {
+        color: #667eea;
+        border-bottom-color: #667eea;
+        background: #f8f9fa;
+    }
+
+    .profile-card {
+        background: white;
+        border: none;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .info-row {
+        padding: 1.5rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #6c757d;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+        color: #2d3748;
+        font-weight: 500;
+    }
+
+    .order-card {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .order-card:hover {
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .order-id {
+        font-weight: 700;
+        color: #667eea;
+        font-size: 1.1rem;
+    }
+
+    .order-date {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .order-detail {
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+    }
+
+    .order-total {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #10b981;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .status-badge {
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border-radius: 20px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #6c757d;
+    }
+
+    .empty-state i {
+        font-size: 5rem;
+        opacity: 0.3;
+        margin-bottom: 1rem;
+    }
+
+    .btn-change-password {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-change-password:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Order Status Bar */
+    .order-status-bar {
+        padding: 0.5rem 0;
+    }
+
+    .status-shortcut {
+        cursor: pointer;
+        padding: 0.75rem 0.5rem;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+    }
+
+    .status-shortcut:hover,
+    .status-shortcut.active {
+        background: #f0f0ff;
+    }
+
+    .status-icon-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 1.6rem;
+        color: #4a5568;
+        margin-bottom: 0.25rem;
+    }
+
+    .status-icon-wrap .status-count {
+        position: absolute;
+        top: -6px;
+        right: -10px;
+        background: #e53e3e;
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 700;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .status-text {
+        font-size: 0.8rem;
+        color: #718096;
+        font-weight: 500;
+    }
+
+    /* Review form styles */
+    .review-form-card {
+        background: #fffbeb;
+        border: 2px solid #fbbf24;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .star-rating {
+        display: flex;
+        gap: 0.25rem;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        cursor: pointer;
+        font-size: 2rem;
+        color: #d1d5db;
+        transition: color 0.2s ease;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label {
+        color: #f59e0b;
+    }
+
+    .btn-submit-review {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border: none;
+        color: white;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-submit-review:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        color: white;
+    }
+
+    .review-success {
+        display: none;
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .review-success i {
+        font-size: 3rem;
+        color: #10b981;
+    }
+
+    @@media (max-width: 768px) {
+        .profile-header {
+            padding: 2rem 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            font-size: 3rem;
+        }
+
+        .profile-nav .nav-link {
+            padding: 0.75rem 1rem;
+        }
+    }
+</style>
+
+<div class="profile-page">
+    <div class="container-fluid" style="width: 90%; max-width: 1600px; margin: 0 auto;">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <h2 class="profile-name">@Model.Fullname</h2>
+                    <p class="profile-email">@Model.Email</p>
+                </div>
+
+                <!-- Profile Navigation -->
+                <nav class="profile-nav">
+                    <ul class="nav nav-tabs border-0" id="profileTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">
+                                <i class="bi bi-person-lines-fill me-2"></i>Personal Information
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab">
+                                <i class="bi bi-bag-check me-2"></i>Order History
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab">
+                                <i class="bi bi-shield-lock me-2"></i>Security
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <div class="card-body p-4">
+                        <div class="tab-content" id="profileTabsContent">
+                            <!-- Personal Information Tab -->
+                            <div class="tab-pane fade show active" id="info" role="tabpanel">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="info-row">
+                                            <div class="info-label">
+                                                <i class="bi bi-person me-2"></i>Full Name
+                                            </div>
+                                            <div class="info-value">@Model.Fullname</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-row">
+                                            <div class="info-label">
+                                                <i class="bi bi-envelope me-2"></i>Email
+                                            </div>
+                                            <div class="info-value">@Model.Email</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-row">
+                                            <div class="info-label">
+                                                <i class="bi bi-telephone me-2"></i>Phone Number
+                                            </div>
+                                            <div class="info-value">@Model.PhoneNumber</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-row">
+                                            <div class="info-label">
+                                                <i class="bi bi-calendar me-2"></i>Date of Birth
+                                            </div>
+                                            <div class="info-value">@(Model.NgaySinh?.ToString("dd/MM/yyyy") ?? "N/A")</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order History Tab -->
+                            <div class="tab-pane fade" id="orders" role="tabpanel">
+                                <!-- Order Status Shortcuts -->
+                                <div class="order-status-bar mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="fw-bold mb-0">My Orders</h6>
+                                    </div>
+                                    <div class="row text-center g-0">
+                                        <div class="col status-shortcut" data-filter="ChoXacNhan">
+                                            <div class="status-icon-wrap">
+                                                <i class="bi bi-clipboard-check"></i>
+                                                @{ var countChoXacNhan = Model.Orders.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.ChoXacNhan); }
+                                                @if (countChoXacNhan > 0)
+                                                {
+                                                    <span class="status-count">@countChoXacNhan</span>
+                                                }
+                                            </div>
+                                            <div class="status-text">Pending</div>
+                                        </div>
+                                        <div class="col status-shortcut" data-filter="ChoLayHang">
+                                            <div class="status-icon-wrap">
+                                                <i class="bi bi-box-seam"></i>
+                                                @{ var countChoLayHang = Model.Orders.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.ChoLayHang); }
+                                                @if (countChoLayHang > 0)
+                                                {
+                                                    <span class="status-count">@countChoLayHang</span>
+                                                }
+                                            </div>
+                                            <div class="status-text">Packing</div>
+                                        </div>
+                                        <div class="col status-shortcut" data-filter="ChoGiaoHang">
+                                            <div class="status-icon-wrap">
+                                                <i class="bi bi-truck"></i>
+                                                @{ var countChoGiaoHang = Model.Orders.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.ChoGiaoHang); }
+                                                @if (countChoGiaoHang > 0)
+                                                {
+                                                    <span class="status-count">@countChoGiaoHang</span>
+                                                }
+                                            </div>
+                                            <div class="status-text">Shipping</div>
+                                        </div>
+                                        <div class="col status-shortcut" data-filter="DaGiao">
+                                            <div class="status-icon-wrap">
+                                                <i class="bi bi-star"></i>
+                                                @{ var countDaGiao = Model.Orders.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.DaGiao); }
+                                                @if (countDaGiao > 0)
+                                                {
+                                                    <span class="status-count">@countDaGiao</span>
+                                                }
+                                            </div>
+                                            <div class="status-text">Review</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <!-- Order List (all orders, hidden by default — shown when clicking a status) -->
+                                @{
+                                    var allOrders = Model.Orders.Where(o =>
+                                        o.TrangThai == ASM.Models.TrangThaiDonHang.ChoXacNhan ||
+                                        o.TrangThai == ASM.Models.TrangThaiDonHang.ChoLayHang ||
+                                        o.TrangThai == ASM.Models.TrangThaiDonHang.ChoGiaoHang ||
+                                        o.TrangThai == ASM.Models.TrangThaiDonHang.DaGiao
+                                    ).ToList();
+                                }
+
+                                <div id="orderListSection" style="display:none;">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="fw-bold mb-0" id="filterTitle">Orders</h6>
+                                        <a href="#" class="text-decoration-none small" id="clearFilter">
+                                            <i class="bi bi-x-circle me-1"></i>Clear Filter
+                                        </a>
+                                    </div>
+                                    @if (allOrders.Any())
+                                    {
+                                        <div id="activeOrderList">
+                                            @foreach (var order in allOrders)
+                                            {
+                                                var badgeClass = order.TrangThai switch
+                                                {
+                                                    ASM.Models.TrangThaiDonHang.ChoXacNhan => "bg-info text-dark",
+                                                    ASM.Models.TrangThaiDonHang.ChoLayHang => "bg-warning text-dark",
+                                                    ASM.Models.TrangThaiDonHang.ChoGiaoHang => "bg-primary",
+                                                    ASM.Models.TrangThaiDonHang.DaGiao => "bg-success",
+                                                    _ => "bg-secondary"
+                                                };
+                                                var statusLabel = order.TrangThai switch
+                                                {
+                                                    ASM.Models.TrangThaiDonHang.ChoXacNhan => "Pending Confirmation",
+                                                    ASM.Models.TrangThaiDonHang.ChoLayHang => "Packing",
+                                                    ASM.Models.TrangThaiDonHang.ChoGiaoHang => "Shipping",
+                                                    ASM.Models.TrangThaiDonHang.DaGiao => "Delivered",
+                                                    _ => "Unknown"
+                                                };
+
+                                                <div class="order-card" data-status="@order.TrangThai">
+                                                    <div class="order-header">
+                                                        <span class="order-id">Order #@order.Id</span>
+                                                        <span class="badge @badgeClass status-badge">@statusLabel</span>
+                                                    </div>
+
+                                                    @if (order.DonhangChitiets != null)
+                                                    {
+                                                        @foreach (var item in order.DonhangChitiets)
+                                                        {
+                                                            <div class="d-flex align-items-center gap-3 mb-2">
+                                                                <img src="~/images/Giay/@item.Giay?.Hinh"
+                                                                     alt="@item.Giay?.Ten"
+                                                                     style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eee;" />
+                                                                <div class="flex-grow-1">
+                                                                    <div class="fw-semibold">@item.Giay?.Ten</div>
+                                                                    <small class="text-muted">Qty: @item.SoLuong · @item.GhiChu</small>
+                                                                </div>
+                                                                <div class="fw-bold text-end" style="min-width:110px;">@item.ThanhTien.ToString("N0") VND</div>
+                                                            </div>
+                                                        }
+                                                    }
+
+                                                    <div class="order-total d-flex justify-content-between">
+                                                        <span class="order-date">
+                                                            <i class="bi bi-calendar3 me-1"></i>@order.NgayDatHang.ToString("dd/MM/yyyy HH:mm")
+                                                        </span>
+                                                        <span>Total: <strong>@order.TongTien.ToString("N0") VND</strong></span>
+                                                    </div>
+
+                                                    @if (order.TrangThai == ASM.Models.TrangThaiDonHang.DaGiao)
+                                                    {
+                                                        <!-- Review Form -->
+                                                        <div class="review-form-card" id="reviewForm-@order.Id">
+                                                            <h6 class="fw-bold mb-2">
+                                                                <i class="bi bi-star-fill text-warning me-1"></i>Rate Your Experience
+                                                            </h6>
+                                                            <p class="text-muted small mb-3">How was your overall shopping experience with ReSole?</p>
+
+                                                            <div class="star-rating mb-3" id="stars-@order.Id">
+                                                                <input type="radio" name="rating-@order.Id" value="5" id="star5-@order.Id" />
+                                                                <label for="star5-@order.Id"><i class="bi bi-star-fill"></i></label>
+                                                                <input type="radio" name="rating-@order.Id" value="4" id="star4-@order.Id" />
+                                                                <label for="star4-@order.Id"><i class="bi bi-star-fill"></i></label>
+                                                                <input type="radio" name="rating-@order.Id" value="3" id="star3-@order.Id" />
+                                                                <label for="star3-@order.Id"><i class="bi bi-star-fill"></i></label>
+                                                                <input type="radio" name="rating-@order.Id" value="2" id="star2-@order.Id" />
+                                                                <label for="star2-@order.Id"><i class="bi bi-star-fill"></i></label>
+                                                                <input type="radio" name="rating-@order.Id" value="1" id="star1-@order.Id" />
+                                                                <label for="star1-@order.Id"><i class="bi bi-star-fill"></i></label>
+                                                            </div>
+
+                                                            <textarea class="form-control mb-3"
+                                                                      id="comment-@order.Id"
+                                                                      rows="3"
+                                                                      placeholder="Share your experience with ReSole (optional)..."
+                                                                      maxlength="500"></textarea>
+
+                                                            <div class="d-flex justify-content-end">
+                                                                <button type="button" class="btn btn-submit-review" onclick="submitReview(@order.Id)">
+                                                                    <i class="bi bi-send me-1"></i>Submit Review
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Review Success (hidden by default) -->
+                                                        <div class="review-success" id="reviewSuccess-@order.Id">
+                                                            <i class="bi bi-check-circle-fill d-block mb-2"></i>
+                                                            <h6 class="fw-bold">Thank you for your review!</h6>
+                                                            <p class="text-muted small mb-0">Your feedback helps us improve.</p>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="empty-state">
+                                            <i class="bi bi-bag-x d-block"></i>
+                                            <h5>No Orders</h5>
+                                            <p>No orders found for this status.</p>
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- Default empty state (shown when no filter is selected) -->
+                                <div id="defaultState">
+                                    <div class="empty-state">
+                                        <i class="bi bi-hand-index-thumb d-block"></i>
+                                        <h5>Select a Status</h5>
+                                        <p>Click on a status icon above to view your orders.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Purchase History Section -->
+                                <div class="mt-4 pt-3 border-top">
+                                    <h6 class="fw-bold mb-3">
+                                        <i class="bi bi-clock-history me-2"></i>Purchase History
+                                    </h6>
+                                    @{
+                                        var historyOrders = Model.Orders.Where(o =>
+                                            o.TrangThai == ASM.Models.TrangThaiDonHang.DaDanhGia ||
+                                            o.TrangThai == ASM.Models.TrangThaiDonHang.DaHuy
+                                        ).ToList();
+                                    }
+                                    @if (historyOrders.Any())
+                                    {
+                                        @foreach (var order in historyOrders)
+                                        {
+                                            var hBadgeClass = order.TrangThai switch
+                                            {
+                                                ASM.Models.TrangThaiDonHang.DaDanhGia => "bg-secondary",
+                                                ASM.Models.TrangThaiDonHang.DaHuy => "bg-danger",
+                                                _ => "bg-secondary"
+                                            };
+                                            var hStatusLabel = order.TrangThai switch
+                                            {
+                                                ASM.Models.TrangThaiDonHang.DaDanhGia => "Completed",
+                                                ASM.Models.TrangThaiDonHang.DaHuy => "Cancelled",
+                                                _ => "Unknown"
+                                            };
+
+                                            <div class="order-card" style="border-left: 4px solid @(order.TrangThai == ASM.Models.TrangThaiDonHang.DaDanhGia ? "#10b981" : "#ef4444");">
+                                                <div class="order-header">
+                                                    <span class="order-id">Order #@order.Id</span>
+                                                    <span class="badge @hBadgeClass status-badge">@hStatusLabel</span>
+                                                </div>
+
+                                                @if (order.DonhangChitiets != null)
+                                                {
+                                                    @foreach (var item in order.DonhangChitiets)
+                                                    {
+                                                        <div class="d-flex align-items-center gap-3 mb-2">
+                                                            <img src="~/images/Giay/@item.Giay?.Hinh"
+                                                                 alt="@item.Giay?.Ten"
+                                                                 style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eee;" />
+                                                            <div class="flex-grow-1">
+                                                                <div class="fw-semibold">@item.Giay?.Ten</div>
+                                                                <small class="text-muted">Qty: @item.SoLuong · @item.GhiChu</small>
+                                                            </div>
+                                                            <div class="fw-bold text-end" style="min-width:110px;">@item.ThanhTien.ToString("N0") VND</div>
+                                                        </div>
+                                                    }
+                                                }
+
+                                                <div class="order-total d-flex justify-content-between">
+                                                    <span class="order-date">
+                                                        <i class="bi bi-calendar3 me-1"></i>@order.NgayDatHang.ToString("dd/MM/yyyy HH:mm")
+                                                    </span>
+                                                    <span>Total: <strong>@order.TongTien.ToString("N0") VND</strong></span>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="text-center text-muted py-3">
+                                            <i class="bi bi-clock-history d-block fs-1 mb-2" style="opacity:0.3;"></i>
+                                            <p class="mb-0">No completed orders yet.</p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Security Tab -->
+                            <div class="tab-pane fade" id="security" role="tabpanel">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-8">
+                                        <div class="text-center mb-4">
+                                            <i class="bi bi-shield-lock display-1 text-primary mb-3"></i>
+                                            <h4>Change Password</h4>
+                                            <p class="text-muted">Secure your account with a strong password</p>
+                                        </div>
+
+                                        <form asp-controller="Khachhang" asp-action="ChangePassword" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                                            <div class="mb-4">
+                                                <label for="CurrentPassword" class="form-label fw-bold">
+                                                    <i class="bi bi-lock me-2"></i>Current Password
+                                                </label>
+                                                <input type="password" 
+                                                       id="CurrentPassword" 
+                                                       name="CurrentPassword" 
+                                                       class="form-control form-control-lg" 
+                                                       placeholder="Enter current password"
+                                                       required />
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <label for="NewPassword" class="form-label fw-bold">
+                                                    <i class="bi bi-key me-2"></i>New Password
+                                                </label>
+                                                <input type="password" 
+                                                       id="NewPassword" 
+                                                       name="NewPassword" 
+                                                       class="form-control form-control-lg" 
+                                                       placeholder="Enter new password"
+                                                       required />
+                                                <small class="text-muted">Minimum 6 characters</small>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <label for="ConfirmPassword" class="form-label fw-bold">
+                                                    <i class="bi bi-check2-square me-2"></i>Confirm New Password
+                                                </label>
+                                                <input type="password" 
+                                                       id="ConfirmPassword" 
+                                                       name="ConfirmPassword" 
+                                                       class="form-control form-control-lg" 
+                                                       placeholder="Re-enter new password"
+                                                       required />
+                                            </div>
+
+                                            <div class="d-grid">
+                                                <button type="submit" class="btn btn-change-password btn-lg">
+                                                    <i class="bi bi-shield-check me-2"></i>Update Password
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        const filterTitles = {
+            'ChoXacNhan': 'Pending Confirmation',
+            'ChoLayHang': 'Packing',
+            'ChoGiaoHang': 'Shipping',
+            'DaGiao': 'To Review'
+        };
+
+        // Status filter — click icon to show matching orders
+        document.querySelectorAll('.status-shortcut').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const filter = this.dataset.filter;
+                const wasActive = this.classList.contains('active');
+
+                document.querySelectorAll('.status-shortcut').forEach(b => b.classList.remove('active'));
+
+                if (wasActive) {
+                    document.getElementById('orderListSection').style.display = 'none';
+                    document.getElementById('defaultState').style.display = '';
+                } else {
+                    this.classList.add('active');
+                    document.getElementById('orderListSection').style.display = '';
+                    document.getElementById('defaultState').style.display = 'none';
+                    document.getElementById('filterTitle').textContent = filterTitles[filter] || 'Orders';
+
+                    document.querySelectorAll('#activeOrderList .order-card').forEach(card => {
+                        card.style.display = card.dataset.status === filter ? '' : 'none';
+                    });
+                }
+
+                const ordersTab = document.getElementById('orders-tab');
+                if (ordersTab && !ordersTab.classList.contains('active')) {
+                    new bootstrap.Tab(ordersTab).show();
+                }
+            });
+        });
+
+        // Clear filter
+        document.getElementById('clearFilter')?.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelectorAll('.status-shortcut').forEach(b => b.classList.remove('active'));
+            document.getElementById('orderListSection').style.display = 'none';
+            document.getElementById('defaultState').style.display = '';
+        });
+
+        // Submit shop review
+        function submitReview(orderId) {
+            const ratingInput = document.querySelector(`input[name="rating-${orderId}"]:checked`);
+            if (!ratingInput) {
+                alert('Please select a star rating.');
+                return;
+            }
+
+            const rating = parseInt(ratingInput.value);
+            const comment = document.getElementById(`comment-${orderId}`).value.trim();
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
+            const formData = new URLSearchParams();
+            formData.append('donHangId', orderId);
+            formData.append('rating', rating);
+            formData.append('comment', comment);
+            if (token) formData.append('__RequestVerificationToken', token);
+
+            fetch('@Url.Action("SubmitReview", "Khachhang")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Hide form, show success
+                    document.getElementById(`reviewForm-${orderId}`).style.display = 'none';
+                    document.getElementById(`reviewSuccess-${orderId}`).style.display = 'block';
+
+                    // Update badge count for Review
+                    const reviewCountEl = document.querySelector('[data-filter="DaGiao"] .status-count');
+                    if (reviewCountEl) {
+                        let count = parseInt(reviewCountEl.textContent) - 1;
+                        if (count <= 0) {
+                            reviewCountEl.remove();
+                        } else {
+                            reviewCountEl.textContent = count;
+                        }
+                    }
+                } else {
+                    alert(data.message || 'Failed to submit review.');
+                }
+            })
+            .catch(() => alert('An error occurred. Please try again.'));
+        }
+    </script>
+    @Html.AntiForgeryToken()
+}

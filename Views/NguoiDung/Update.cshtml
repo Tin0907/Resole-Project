@@ -1,0 +1,166 @@
+﻿@model ASM.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="mb-0 fw-bold text-primary">
+            <i class="bi bi-pencil-square me-2"></i>Edit User Information
+        </h1>
+        <p class="text-muted small">Update account information for @Model.User</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-4">
+                <form asp-action="Update" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 rounded-3" role="alert">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        <strong>Error!</strong> Please check the information.
+                    </div>
+
+                    <input type="hidden" asp-for="NguoiDungID" />
+
+                    <div class="mb-3">
+                        <label asp-for="User" class="form-label fw-bold">Username</label>
+                        <input asp-for="User" class="form-control form-control-lg" placeholder="Username" readonly />
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-info-circle me-1"></i>Username cannot be changed
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="HoTen" class="form-label fw-bold">Full Name</label>
+                        <input asp-for="HoTen" class="form-control form-control-lg" placeholder="Enter full name" />
+                        <span asp-validation-for="HoTen" class="text-danger small d-block mt-1"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-bold">Email</label>
+                        <input asp-for="Email" type="email" class="form-control form-control-lg" placeholder="Enter email" />
+                        <span asp-validation-for="Email" class="text-danger small d-block mt-1"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="ChucDanh" class="form-label fw-bold">Job Title</label>
+                                <input asp-for="ChucDanh" class="form-control form-control-lg" placeholder="Enter job title" />
+                                <span asp-validation-for="ChucDanh" class="text-danger small d-block mt-1"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="NgaySinh" class="form-label fw-bold">Date of Birth</label>
+                                <input asp-for="NgaySinh" type="date" class="form-control form-control-lg" />
+                                <span asp-validation-for="NgaySinh" class="text-danger small d-block mt-1"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-bold">Password</label>
+                        <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="Enter to change password" />
+                        <span asp-validation-for="Password" class="text-danger small d-block mt-1"></span>
+                        <small class="text-muted d-block mt-2">
+                            <i class="bi bi-info-circle me-1"></i>Leave blank if you don't want to change password
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label fw-bold">Confirm Password</label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control form-control-lg" placeholder="Re-enter password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small d-block mt-1"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" asp-for="Admin" id="AdminCheck" />
+                                    <label class="form-check-label fw-bold" for="AdminCheck">
+                                        <i class="bi bi-shield me-2 text-danger"></i>Grant Admin Rights
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" asp-for="Locked" id="LockedCheck" />
+                                    <label class="form-check-label fw-bold" for="LockedCheck">
+                                        <i class="bi bi-check me-2 text-success"></i>Activate Account
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning btn-lg">
+                            <i class="bi bi-arrow-repeat me-2"></i>Update
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-circle me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-light py-3">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-info-circle me-2 text-info"></i>Account Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <dl class="small">
+                    <dt class="fw-bold mt-2">Account ID:</dt>
+                    <dd>@Model.NguoiDungID</dd>
+
+                    <dt class="fw-bold mt-2">Login Username:</dt>
+                    <dd>@Model.User</dd>
+
+                    <dt class="fw-bold mt-2">Permission:</dt>
+                    <dd>
+                        @if (Model.Admin)
+                        {
+                            <span class="badge bg-danger">Admin</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">User</span>
+                        }
+                    </dd>
+
+                    <dt class="fw-bold mt-2">Status:</dt>
+                    <dd>
+                        @if (Model.Locked)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">Locked</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

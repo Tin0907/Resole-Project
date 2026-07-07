@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReSole Sneaker Shop - T?ng H?p Ch?c Nãng</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        h1 {
+            color: #111827;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 3px solid #111827;
+            padding-bottom: 15px;
+        }
+        
+        .header-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 0.95em;
+        }
+        
+        .header-info p {
+            margin: 5px 0;
+        }
+        
+        h2 {
+            color: #0f172a;
+            font-size: 1.8em;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-left: 4px solid #0f172a;
+            padding-left: 15px;
+            page-break-after: avoid;
+        }
+        
+        h3 {
+            color: #1f2937;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            page-break-after: avoid;
+        }
+        
+        h4 {
+            color: #374151;
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        p {
+            margin: 10px 0;
+            text-align: justify;
+            color: #4b5563;
+        }
+        
+        ul, ol {
+            margin: 15px 0 15px 30px;
+            color: #4b5563;
+        }
+        
+        li {
+            margin: 8px 0;
+            line-height: 1.8;
+        }
+        
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+        }
+        
+        th {
+            background: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+        
+        tr:hover {
+            background: #f3f4f6;
+        }
+        
+        code, pre {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d73a49;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            overflow-x: auto;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #0f172a;
+            background: #f8f9fa;
+        }
+        
+        .feature-box {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #92400e;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #111827;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin: 2px 5px 2px 0;
+            font-weight: 600;
+        }
+        
+        .toc {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+            border: none;
+            padding-left: 0;
+        }
+        
+        .toc ol {
+            margin-left: 20px;
+        }
+        
+        .toc a {
+            color: #0ea5e9;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #0f172a 0%, #1f2937 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .flow-diagram {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            line-height: 2;
+        }
+        
+        .footer {
+            border-top: 2px solid #e5e7eb;
+            margin-top: 50px;
+            padding-top: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .page-break {
+            page-break-after: always;
+            margin: 40px 0;
+        }
+        
+        .emoji {
+            margin-right: 5px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+            
+            h2 {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <h1><span class="emoji">??</span>ReSole Sneaker Shop</h1>
+        <div class="header-info">
+            <p><strong>T?ng H?p Ð?y Ð? Các Ch?c Nãng</strong></p>
+            <p>L?p tr?nh viên: <strong>Tr?nh Thiên Ân</strong> | MSSV: <strong>422210281</strong></p>
+            <p>Công ngh?: <strong>ASP.NET Core 8.0</strong> | Database: <strong>SQL Server</strong></p>
+            <p>Ngày hoàn thành: <strong>2025</strong> | Phiên b?n: <strong>2.0</strong></p>
+        </div>
+        
+        <!-- M?c l?c -->
+        <div class="toc">
+            <h3>?? M?c L?c</h3>
+            <ol>
+                <li><a href="#section1">T?ng quan h? th?ng</a></li>
+                <li><a href="#section2">Ch?c nãng phía User</a></li>
+                <li><a href="#section3">Ch?c nãng phía Admin</a></li>
+                <li><a href="#section4">Ki?n trúc h? th?ng</a></li>
+                <li><a href="#section5">Cõ s? d? li?u</a></li>
+                <li><a href="#section6">Công ngh? s? d?ng</a></li>
+                <li><a href="#section7">Quy tr?nh chi ti?t</a></li>
+                <li><a href="#section8">Helpers & Utilities</a></li>
+                <li><a href="#section9">Layouts & Partials</a></li>
+                <li><a href="#section10">X? l? l?i & B?o m?t</a></li>
+                <li><a href="#section11">C?i ti?n týõng lai</a></li>
+            </ol>
+        </div>
+        
+        <!-- 1. T?ng quan -->
+        <h2 id="section1"><span class="emoji">??</span>1. T?NG QUAN H? TH?NG</h2>
+        
+        <h3>Mô t? d? án</h3>
+        <p><strong>ReSole Sneaker Shop</strong> là website thýõng m?i ði?n t? bán giày sneaker chuyên nghi?p, ðý?c phát tri?n b?ng ASP.NET Core 8.0 v?i SQL Server. H? th?ng có 2 ph?n chính:</p>
+        <ul>
+            <li><strong>?? User Site (Khách hàng):</strong> Xem s?n ph?m, mua hàng, theo d?i ðõn hàng</li>
+            <li><strong>?? Admin Site (Qu?n tr? viên):</strong> Qu?n l? s?n ph?m, ðõn hàng, ngý?i dùng</li>
+        </ul>
+        
+        <h3>M?c ðích chính</h3>
+        <ul>
+            <li>Cung c?p tr?i nghi?m mua s?m tr?c tuy?n chuyên nghi?p</li>
+            <li>Qu?n l? kho hàng hi?u qu?</li>
+            <li>X? l? ðõn hàng t? ð?ng</li>
+            <li>B?o m?t thông tin khách hàng</li>
+        </ul>
+        
+        <h3>Th?ng kê d? án</h3>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Controllers</div>
+                <div class="stat-number">8</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Services</div>
+                <div class="stat-number">6</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Views</div>
+                <div class="stat-number">40+</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Database Tables</div>
+                <div class="stat-number">6</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Models</div>
+                <div class="stat-number">12</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">D?ng Code</div>
+                <div class="stat-number">5000+</div>
+            </div>
+        </div>
+        
+        <!-- 2. User Features -->
+        <h2 id="section2"><span class="emoji">??</span>2. CH?C NÃNG PHÍA USER (KHÁCH HÀNG)</h2>
+        
+        <h3>?? Trang Ch? (UserHome)</h3>
+        <p><strong>URL:</strong> <code>/Home/UserHome</code></p>
+        <div class="feature-box">
+            <h4>Các ph?n hi?n th?:</h4>
+            <ol>
+                <li><strong>Special Sneaker Collection</strong> - 3 s?n ph?m ð?c bi?t</li>
+                <li><strong>Our Latest Products</strong> - 4 s?n ph?m m?i nh?t</li>
+                <li><strong>Brand Showcase</strong> - Nike & Adidas</li>
+            </ol>
+        </div>
+        
+        <h3>??? Danh Sách S?n Ph?m (Shop)</h3>
+        <p><strong>URL:</strong> <code>/ThucDon/Index</code></p>
+        <ul>
+            <li>?? H?nh ?nh s?n ph?m (crop t? ð?ng)</li>
+            <li>?? Tên (gi?i h?n 2 d?ng)</li>
+            <li>?? Giá ti?n</li>
+            <li>??? Phân lo?i (GiayDa, GiaySneaker, GiayTheThao, SpecialShoe)</li>
+            <li>?? Mô t? (gi?i h?n 2 d?ng)</li>
+            <li>?? Tr?ng thái kho</li>
+        </ul>
+        
+        <h3>?? Chi Ti?t S?n Ph?m</h3>
+        <p><strong>URL:</strong> <code>/ThucDon/Details/{id}</code></p>
+        <h4>Tính nãng:</h4>
+        <ol>
+            <li><strong>Ch?n Size</strong> - Radio buttons (39-43), b?t bu?c</li>
+            <li><strong>Add to Cart</strong> - AJAX, c?p nh?t badge</li>
+            <li><strong>Buy Now</strong> - B? qua gi?, thanh toán ngay</li>
+        </ol>
+        
+        <h3>?? Gi? Hàng</h3>
+        <p><strong>URL:</strong> <code>/Cart/Index</code></p>
+        <ul>
+            <li>Hi?n th? danh sách s?n ph?m</li>
+            <li>Update s? lý?ng +/-</li>
+            <li>Remove item</li>
+            <li>Clear toàn b? gi?</li>
+            <li>Tính t?ng ti?n realtime</li>
+            <li>Cart badge c?p nh?t liên t?c</li>
+        </ul>
+        
+        <h3>?? Thanh Toán (Checkout)</h3>
+        <p><strong>URL:</strong> <code>/Checkout/Index</code></p>
+        <ul>
+            <li>Auto-fill thông tin khách hàng</li>
+            <li>Danh sách s?n ph?m</li>
+            <li>Tính t?ng ti?n</li>
+            <li>Validate thông tin server-side</li>
+            <li>T?o ðõn hàng t? ð?ng</li>
+            <li>Redirect success page</li>
+        </ul>
+        
+        <h3>?? Qu?n L? Ðõn Hàng (User)</h3>
+        <p><strong>URL:</strong> <code>/Donhang/Index</code></p>
+        <ul>
+            <li>Xem danh sách ðõn hàng cá nhân</li>
+            <li>Xem chi ti?t t?ng ðõn</li>
+            <li>Tr?ng thái ðõn: Pending, Processing, Shipping, Completed, Cancelled</li>
+        </ul>
+        
+        <h3>?? Tài Kho?n Khách Hàng</h3>
+        <ul>
+            <li><strong>Ðãng k?:</strong> Email, tên, SÐT, ð?a ch?, m?t kh?u</li>
+            <li><strong>Ðãng nh?p:</strong> Email + m?t kh?u</li>
+            <li><strong>H? sõ:</strong> Xem & c?p nh?t thông tin</li>
+            <li><strong>Ð?i m?t kh?u:</strong> Verify c? ? nh?p m?i</li>
+        </ul>
+        
+        <!-- 3. Admin Features -->
+        <h2 id="section3"><span class="emoji">??</span>3. CH?C NÃNG PHÍA ADMIN (QU?N TR? VIÊN)</h2>
+        
+        <h3>?? Ðãng Nh?p Admin</h3>
+        <p><strong>URL:</strong> <code>/Admin/Login</code></p>
+        <ul>
+            <li>Username + Password (MD5 hash)</li>
+            <li>Session: ND_Username, ND_HoTen</li>
+            <li>Filter b?o v?: AuthenticationFilterAttribute</li>
+        </ul>
+        
+        <h3>?? Qu?n L? S?n Ph?m (Giày)</h3>
+        
+        <h4>Danh sách s?n ph?m</h4>
+        <p><strong>URL:</strong> <code>/Giay/Index</code></p>
+        <ul>
+            <li>Table hi?n th? t?t c? s?n ph?m</li>
+            <li>Thumbnail 80x80px</li>
+            <li>Actions: Chi ti?t, S?a, Xóa</li>
+        </ul>
+        
+        <h4>Thêm s?n ph?m</h4>
+        <p><strong>URL:</strong> <code>/Giay/Create</code></p>
+        <ul>
+            <li>Tên (max 100)</li>
+            <li>Mô t? (max 500)</li>
+            <li>Giá (0-1,000,000)</li>
+            <li>Phân lo?i (dropdown)</li>
+            <li>H?nh ?nh (upload, GUID filename)</li>
+        </ul>
+        
+        <h4>S?a & Xóa s?n ph?m</h4>
+        <ul>
+            <li><strong>Edit:</strong> C?p nh?t thông tin, xóa ?nh c? khi upload ?nh m?i</li>
+            <li><strong>Delete:</strong> Xóa ?nh kh?i server + DB</li>
+        </ul>
+        
+        <h3>?? Qu?n L? Ðõn Hàng (Admin)</h3>
+        
+        <h4>Danh sách & Chi ti?t</h4>
+        <ul>
+            <li>Xem t?t c? ðõn hàng</li>
+            <li>Filter theo tr?ng thái</li>
+            <li>Search theo m? ðõn, tên khách</li>
+            <li>Xem chi ti?t s?n ph?m t?ng ðõn</li>
+        </ul>
+        
+        <h4>C?p nh?t tr?ng thái</h4>
+        <p><strong>URL:</strong> <code>/Donhang/Edit/{id}</code></p>
+        <ul>
+            <li>Dropdown select tr?ng thái m?i</li>
+            <li>Lýu ngày c?p nh?t</li>
+        </ul>
+        
+        <h3>????? Qu?n L? Ngý?i Dùng Admin</h3>
+        
+        <h4>CRUD Operations</h4>
+        <ul>
+            <li><strong>Create:</strong> Username, m?t kh?u, h? tên, email</li>
+            <li><strong>Read:</strong> Danh sách & chi ti?t</li>
+            <li><strong>Update:</strong> S?a (không ð?i username)</li>
+            <li><strong>Delete:</strong> Xóa (không xóa chính m?nh)</li>
+        </ul>
+        
+        <h3>?? Qu?n L? Khách Hàng (Admin)</h3>
+        <ul>
+            <li>Danh sách khách hàng ð? ðãng k?</li>
+            <li>Xem l?ch s? ðõn hàng</li>
+            <li>Xem thông tin chi ti?t</li>
+            <li>Khóa/M? khóa tài kho?n (optional)</li>
+        </ul>
+        
+        <div class="page-break"></div>
+        
+        <!-- 4. Architecture -->
+        <h2 id="section4"><span class="emoji">???</span>4. KI?N TRÚC H? TH?NG</h2>
+        
+        <h3>MVC Pattern</h3>
+        <div class="flow-diagram">
+BROWSER/CLIENT
+     ? HTTP Request
+CONTROLLERS (8)
+  • HomeController
+  • GiayController
+  • CartController
+  • CheckoutController
+  ? Business Logic
+SERVICES (6)
+  • GiaySvc
+  • CartSvc
+  • DonhangSvc
+  ? Data Access
+ENTITY FRAMEWORK CORE
+  ?
+SQL SERVER DATABASE
+        </div>
+        
+        <h3>C?u trúc thý m?c chính</h3>
+        <ul>
+            <li><code>Controllers/</code> - HTTP request handlers</li>
+            <li><code>Models/</code> - Business entities + ViewModels</li>
+            <li><code>Services/</code> - Business logic layer</li>
+            <li><code>Views/</code> - Razor views (40+ files)</li>
+            <li><code>wwwroot/</code> - Static files (CSS, JS, Images)</li>
+            <li><code>Helpers/</code> - Utility classes</li>
+            <li><code>Filters/</code> - Custom filters</li>
+            <li><code>Migrations/</code> - EF Core migrations</li>
+        </ul>
+        
+        <!-- 5. Database -->
+        <h2 id="section5"><span class="emoji">???</span>5. CÕ S? D? LI?U</h2>
+        
+        <h3>Sõ ð? m?i quan h?</h3>
+        <p>H? th?ng s? d?ng 6 b?ng chính v?i quan h? 1:N và N:M:</p>
+        <table>
+            <tr>
+                <th>B?ng</th>
+                <th>Ch?a d? li?u</th>
+                <th>Trý?ng chính</th>
+            </tr>
+            <tr>
+                <td>Khachhangs</td>
+                <td>Thông tin khách hàng</td>
+                <td>Id, Email (PK)</td>
+            </tr>
+            <tr>
+                <td>Nguoidungs</td>
+                <td>Admin users</td>
+                <td>Id, Username (PK)</td>
+            </tr>
+            <tr>
+                <td>MonAns (Giay)</td>
+                <td>S?n ph?m giày</td>
+                <td>Id, Ten, Gia, PhanLoai</td>
+            </tr>
+            <tr>
+                <td>Carts</td>
+                <td>Gi? hàng</td>
+                <td>Id, KhachHangId, GiayId, Size</td>
+            </tr>
+            <tr>
+                <td>Donhangs</td>
+                <td>Ðõn hàng</td>
+                <td>Id, KhachHangId, NgayDat, TongTien</td>
+            </tr>
+            <tr>
+                <td>DonhangChitiets</td>
+                <td>Chi ti?t ðõn hàng</td>
+                <td>Id, DonhangId, GiayId, DonGia</td>
+            </tr>
+        </table>
+        
+        <h3>Constraints & Validations</h3>
+        <ul>
+            <li>Foreign Keys: Ð?m b?o referential integrity</li>
+            <li>UNIQUE: Email (Khachhangs), Username (Nguoidungs)</li>
+            <li>NOT NULL: Các trý?ng b?t bu?c</li>
+            <li>IDENTITY: Auto-increment ID</li>
+        </ul>
+        
+        <!-- 6. Technologies -->
+        <h2 id="section6"><span class="emoji">??</span>6. CÁC CÔNG NGH? S? D?NG</h2>
+        
+        <h3>Backend Stack</h3>
+        <table>
+            <tr>
+                <th>Công ngh?</th>
+                <th>Phiên b?n</th>
+                <th>M?c ðích</th>
+            </tr>
+            <tr>
+                <td>ASP.NET Core</td>
+                <td>8.0</td>
+                <td>Web framework chính</td>
+            </tr>
+            <tr>
+                <td>Entity Framework Core</td>
+                <td>8.0</td>
+                <td>ORM & Data Access</td>
+            </tr>
+            <tr>
+                <td>SQL Server</td>
+                <td>2019+</td>
+                <td>Database engine</td>
+            </tr>
+            <tr>
+                <td>C#</td>
+                <td>12.0</td>
+                <td>Ngôn ng? l?p tr?nh</td>
+            </tr>
+        </table>
+        
+        <h3>Frontend Stack</h3>
+        <ul>
+            <li><strong>Razor Pages</strong> - Template engine</li>
+            <li><strong>Bootstrap 5</strong> - Responsive UI Framework</li>
+            <li><strong>Bootstrap Icons</strong> - Icon library</li>
+            <li><strong>jQuery</strong> - DOM manipulation</li>
+            <li><strong>AJAX</strong> - Async requests</li>
+            <li><strong>CSS3</strong> - Advanced styling</li>
+        </ul>
+        
+        <h3>B?o M?t</h3>
+        <ul>
+            <li><strong>MD5 Hashing:</strong> M? hóa m?t kh?u (Note: Không an toàn tuy?t ð?i)</li>
+            <li><strong>Session Management:</strong> Timeout 24h, HttpOnly cookie</li>
+            <li><strong>Authentication Filter:</strong> B?o v? trang admin</li>
+            <li><strong>SQL Injection Prevention:</strong> Dùng EF parameterized queries</li>
+            <li><strong>XSS Prevention:</strong> HTML encode output</li>
+        </ul>
+        
+        <!-- 7. Workflows -->
+        <h2 id="section7"><span class="emoji">??</span>7. QUY TR?NH CHI TI?T</h2>
+        
+        <h3>Flow 1: Mua Hàng (Add to Cart)</h3>
+        <div class="flow-diagram">
+1. User ch?n s?n ph?m & Size
+2. Nh?n "Add to Cart"
+3. AJAX POST /Cart/Add {giayId, size, quantity}
+4. CartController validate & x? l?:
+   - Ki?m tra login
+   - Ki?m tra s?n ph?m
+   - T?m item cùng size
+   - C?ng quantity ho?c thêm m?i
+5. Return JSON {success: true, cartCount: 3}
+6. JavaScript update badge
+7. ? Hoàn t?t
+        </div>
+        
+        <h3>Flow 2: Thanh Toán (Checkout)</h3>
+        <div class="flow-diagram">
+1. User -> /Checkout/Index
+2. Load thông tin khách & gi? hàng
+3. User ði?n ð?a ch? giao hàng
+4. Nh?n "Place Order"
+5. POST /Checkout/PlaceOrder:
+   - Validate
+   - T?o Donhang
+   - T?o DonhangChitiet
+   - Xóa Carts
+6. Redirect /Checkout/Success
+7. Hi?n th? m? ðõn hàng
+8. ? Hoàn t?t
+        </div>
+        
+        <h3>Flow 3: Mua Ngay (Buy Now)</h3>
+        <div class="flow-diagram">
+1. User ch?n s?n ph?m & Size
+2. Nh?n "Buy Now"
+3. POST /Checkout/BuyNow:
+   - T?o BuyNowItem
+   - Lýu vào Session
+4. Redirect /Checkout/Index
+5. CheckoutController check BuyNowItem
+6. Thanh toán nhý b?nh thý?ng
+7. PlaceOrder: Xóa Session, GI? Carts
+8. ? Hoàn t?t (Carts không b? xóa)
+        </div>
+        
+        <!-- 8. Helpers -->
+        <h2 id="section8"><span class="emoji">???</span>8. HELPERS & UTILITIES</h2>
+        
+        <h3>MahoaHelper.cs</h3>
+        <p>M? hóa m?t kh?u b?ng MD5 trý?c lýu database</p>
+        
+        <h3>UploadHelper.cs</h3>
+        <p>Upload h?nh ?nh s?n ph?m v?i tên file GUID unique</p>
+        
+        <h3>CartHelper.cs</h3>
+        <p>Serialize/Deserialize object t? Session</p>
+        
+        <h3>SessionKey.cs</h3>
+        <p>Qu?n l? session keys t?p trung (tr?nh typo)</p>
+        
+        <!-- 9. Layouts -->
+        <h2 id="section9"><span class="emoji">??</span>9. LAYOUTS & PARTIALS</h2>
+        
+        <h3>_WebLayout.cshtml (User Site)</h3>
+        <ul>
+            <li><strong>Header:</strong> Logo, menu navigation</li>
+            <li><strong>Sticky Navbar:</strong> Blur effect, smooth transition</li>
+            <li><strong>Cart Badge:</strong> S? lý?ng items real-time</li>
+            <li><strong>User Menu:</strong> Dropdown (Profile, Orders, Logout)</li>
+            <li><strong>Footer:</strong> Ð?a ch?, liên h?, social</li>
+            <li><strong>Responsive:</strong> Mobile-first design</li>
+        </ul>
+        
+        <h3>_Layout.cshtml (Admin Site)</h3>
+        <ul>
+            <li>Admin navbar + menu</li>
+            <li>Sidebar navigation</li>
+            <li>Main content area</li>
+        </ul>
+        
+        <h3>Partial Views</h3>
+        <ul>
+            <li><strong>_LoginPartial.cshtml:</strong> Login/Profile dropdown</li>
+            <li><strong>_MenuPartial.cshtml:</strong> Admin sidebar</li>
+            <li><strong>_DonhangChitiet.cshtml:</strong> Order items table</li>
+            <li><strong>_ValidationScriptsPartial.cshtml:</strong> jQuery validation</li>
+        </ul>
+        
+        <!-- 10. Security -->
+        <h2 id="section10"><span class="emoji">??</span>10. X? L? L?I & B?O M?T</h2>
+        
+        <h3>Global Error Handling</h3>
+        <ul>
+            <li>Global error page: <code>Views/Shared/Error.cshtml</code></li>
+            <li>Display Request ID cho debug</li>
+            <li>Environment-based error handling</li>
+        </ul>
+        
+        <h3>Authentication & Authorization</h3>
+        <ul>
+            <li>Filter: <code>AuthenticationFilterAttribute</code></li>
+            <li>B?o v? trang admin</li>
+            <li>Redirect sang login n?u chýa ðãng nh?p</li>
+        </ul>
+        
+        <h3>Data Validation</h3>
+        <ul>
+            <li><strong>Client-side:</strong> HTML5 + jQuery Validation</li>
+            <li><strong>Server-side:</strong> ModelState.IsValid</li>
+            <li>Validate trý?c khi lýu database</li>
+        </ul>
+        
+        <h3>SQL Injection Prevention</h3>
+        <ul>
+            <li>Entity Framework (Parameterized Queries)</li>
+            <li>Không dùng raw SQL</li>
+            <li>Validate & sanitize input</li>
+        </ul>
+        
+        <h3>Other Security Measures</h3>
+        <ul>
+            <li>? XSS Prevention: HTML encode output</li>
+            <li>? CSRF Token: Built-in ASP.NET Core</li>
+            <li>? HTTPS: Production ready</li>
+            <li>? Password: M? hóa trý?c lýu DB</li>
+        </ul>
+        
+        <!-- 11. Future -->
+        <h2 id="section11"><span class="emoji">??</span>11. CÁI TI?N TÝÕNG LAI</h2>
+        
+        <h3>E-commerce Features</h3>
+        <ul>
+            <li>Payment Integration (PayPal, Stripe, VNPay)</li>
+            <li>Real-time order tracking</li>
+            <li>Email/SMS notifications</li>
+            <li>Product reviews & ratings</li>
+            <li>Wishlist management</li>
+            <li>Discount codes & promotions</li>
+        </ul>
+        
+        <h3>Administrative Features</h3>
+        <ul>
+            <li>Dashboard analytics (sales, revenue)</li>
+            <li>Inventory management</li>
+            <li>Marketing tools & campaigns</li>
+            <li>Advanced reporting</li>
+        </ul>
+        
+        <h3>Technical Improvements</h3>
+        <ul>
+            <li>Caching (Redis)</li>
+            <li>CDN for static files</li>
+            <li>Docker containerization</li>
+            <li>CI/CD pipeline</li>
+            <li>Unit & Integration tests</li>
+            <li>bcrypt password hashing</li>
+            <li>OAuth 2.0 authentication</li>
+        </ul>
+        
+        <!-- Highlights -->
+        <h2>?? ÐI?M N?I B?T</h2>
+        <ul>
+            <li>? Giao di?n ðõn gi?n, thân thi?n</li>
+            <li>? B?o m?t cõ b?n (MD5, Session, Filter)</li>
+            <li>? Responsive design (Mobile-first)</li>
+            <li>? X? l? l?i toàn c?c</li>
+            <li>? Validation client-side & server-side</li>
+            <li>? AJAX cho tr?i nghi?m mý?t mà</li>
+            <li>? C?u trúc code s?ch (MVC, DI, Service Layer)</li>
+            <li>? Database transactions</li>
+            <li>? Entity Framework ORM</li>
+            <li>? Middleware & Filters</li>
+            <li>? Session management</li>
+            <li>? File upload handling</li>
+            <li>? Partial views reusable</li>
+            <li>? Bootstrap responsive framework</li>
+            <li>? Vietnamese localization 100%</li>
+        </ul>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>L?p tr?nh viên:</strong> Tr?nh Thiên Ân (MSSV: 422210281)</p>
+            <p><strong>GitHub:</strong> <a href="https://github.com/Tin0907/ReSole" target="_blank">https://github.com/Tin0907/ReSole</a></p>
+            <p><strong>Phiên b?n:</strong> 2.0 | <strong>Ngày c?p nh?t:</strong> 2025 | <strong>Tr?ng thái:</strong> ? Hoàn thành</p>
+            <p style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px;">
+                © 2025 ReSole Sneaker Shop. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+﻿@model ASM.Models.Giay
+
+@{
+    ViewData["Title"] = "Create Shoe";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="mb-0 fw-bold text-primary">
+            <i class="bi bi-plus-circle-fill me-2"></i>Add New Shoe
+        </h1>
+        <p class="text-muted small">Enter shoe information</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-light py-3 border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-file-earmark-text me-2"></i>Shoe Information
+                </h6>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Ten" class="form-label fw-bold">
+                            <i class="bi bi-tag me-2"></i>Shoe Name
+                        </label>
+                        <input asp-for="Ten" class="form-control form-control-lg"
+                               placeholder="Enter shoe name" />
+                        <span asp-validation-for="Ten" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="Gia" class="form-label fw-bold">
+                                <i class="bi bi-currency-dollar me-2"></i>Price
+                            </label>
+                            <input asp-for="Gia" class="form-control form-control-lg" placeholder="0" />
+                            <span asp-validation-for="Gia" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="PhanLoai" class="form-label fw-bold">
+                                <i class="bi bi-bookmark me-2"></i>Category
+                            </label>
+                            <select asp-for="PhanLoai" class="form-select form-select-lg">
+                                <option value="">-- Select Category --</option>
+                                <option value="1">GiayDa</option>
+                                <option value="2">GiaySneaker</option>
+                                <option value="3">GiayTheThao</option>
+                                <option value="4">SpecialShoe</option>
+                            </select>
+                            <span asp-validation-for="PhanLoai" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="MoTa" class="form-label fw-bold">
+                            <i class="bi bi-chat-left-text me-2"></i>Description
+                        </label>
+                        <textarea asp-for="MoTa" class="form-control" rows="5"
+                                  placeholder="Enter description"></textarea>
+                        <span asp-validation-for="MoTa" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="bi bi-image me-2"></i>Image
+                        </label>
+                        <input asp-for="ImageFile" type="file" class="form-control form-control-lg" accept="image/*" />
+                        <small class="text-muted">Support formats: JPG, PNG, GIF</small>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="Quantity" class="form-label fw-bold">
+                                <i class="bi bi-stack me-2"></i>Quantity
+                            </label>
+                            <input asp-for="Quantity" class="form-control" type="number" min="0" value="0" />
+                            <span asp-validation-for="Quantity" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Status" class="form-label fw-bold">
+                                <i class="bi bi-sliders me-2"></i>Status
+                            </label>
+                            <select asp-for="Status" class="form-select">
+                                <option value="1">InStock</option>
+                                <option value="2">OutOfStock</option>
+                                <option value="3">Locked</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="TrangThai" checked />
+                            <label class="form-check-label fw-bold" asp-for="TrangThai">
+                                Active
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Add
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-circle me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-light py-3">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-info-circle me-2"></i>Guidelines
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Enter full information
+                    </li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Price must be greater
+                        than 0
+                    </li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Image must be less
+                        than 5MB
+                    </li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Description should be
+                        clear and detailed
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

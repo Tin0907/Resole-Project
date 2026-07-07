@@ -1,0 +1,190 @@
+@model IEnumerable<ASM.Models.Giay>
+
+@{
+    ViewData["Title"] = "Inventory Overview";
+}
+
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="mb-0 fw-bold text-primary">
+                <i class="bi bi-box-seam me-2"></i>Inventory Overview
+            </h1>
+            <p class="text-muted small">Current stock levels and quick actions</p>
+        </div>
+        <a asp-action="Create" class="btn btn-success btn-lg shadow-sm">
+            <i class="bi bi-plus-circle me-2"></i>Add New Shoe
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light border-bottom">
+                    <tr>
+                        <th class="fw-bold small text-uppercase">#</th>
+                        <th class="fw-bold small text-uppercase">Shoe</th>
+                        <th class="fw-bold small text-uppercase">Image</th>
+                        <th class="fw-bold small text-uppercase">Quantity</th>
+                        <th class="fw-bold small text-uppercase">Status</th>
+                        <th class="fw-bold small text-uppercase">Updated</th>
+                        <th class="fw-bold small text-uppercase text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        var index = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr class="align-middle">
+                                <td>@index</td>
+                                <td class="fw-bold">@item.Ten <div class="text-muted small">@item.PhanLoai</div></td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Hinh))
+                                    {
+                                        <img src="~/images/Giay/@item.Hinh" style="width:80px; height:60px; object-fit:cover;" class="rounded" />
+                                    }
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control form-control-sm quantity-input" value="@item.Quantity" data-id="@item.Id" min="0" />
+                                </td>
+                                <td>
+                                    @switch(item.Status)
+                                    {
+                                        case ASM.Models.ProductStatus.Locked:
+                                            <span class="badge bg-dark">Locked</span>
+                                            break;
+                                        case ASM.Models.ProductStatus.OutOfStock:
+                                            <span class="badge bg-danger">Out of Stock</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-success">In Stock</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>@item.UpdatedAt.ToString("g")</td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        <button class="btn btn-sm btn-outline-secondary btn-lock" data-id="@item.Id">Lock</button>
+                                        <button class="btn btn-sm btn-primary btn-save" data-id="@item.Id">Save</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">No products found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function postJson(url, data) {
+            const resp = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value },
+                body: JSON.stringify(data)
+            });
+            return resp.json();
+        }
+
+        function notify(type, title, message) {
+            if (typeof showToast === 'function') {
+                showToast(type, title, message);
+            } else if (typeof toastr !== 'undefined') {
+                // toastr mapping
+                switch(type) {
+                    case 'success': toastr.success(message, title); break;
+                    case 'error': toastr.error(message, title); break;
+                    case 'warning': toastr.warning(message, title); break;
+                    default: toastr.info(message, title); break;
+                }
+            } else {
+                alert(message || title);
+            }
+        }
+
+        document.querySelectorAll('.btn-save').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const id = this.dataset.id;
+                const row = this.closest('tr');
+                const qtyInput = row.querySelector('.quantity-input');
+                const qty = parseInt(qtyInput.value || 0);
+                const btnEl = this;
+                const origHtml = btnEl.innerHTML;
+                btnEl.disabled = true;
+                btnEl.innerHTML = '<i class="bi bi-arrow-repeat me-2 spin-icon"></i>Saving...';
+                try {
+                    const data = await postJson(`/Giay/UpdateInventory?id=${id}`, { id: id, quantity: qty });
+                    if (data.success) {
+                        notify('success', 'Updated', 'Inventory updated successfully');
+                        // update status badge in row without full reload
+                        const statusCell = row.querySelector('td:nth-child(5)');
+                        if (statusCell) {
+                            // replace with In Stock / Out of Stock / Locked
+                            let badge = '<span class="badge bg-success">In Stock</span>';
+                            if (qty <= 0) badge = '<span class="badge bg-dark">Locked</span>';
+                            statusCell.innerHTML = badge;
+                        }
+                        // update updated-at cell (6th) if exists
+                        const updatedCell = row.querySelector('td:nth-child(6)');
+                        if (updatedCell) updatedCell.textContent = new Date().toLocaleString();
+                    } else {
+                        notify('error', 'Update failed', data.message || 'Could not update inventory');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    notify('error', 'Error', 'An error occurred while updating');
+                } finally {
+                    btnEl.disabled = false;
+                    btnEl.innerHTML = origHtml;
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-lock').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const id = this.dataset.id;
+                if (!confirm('Lock this product? Users will see it as out of stock.')) return;
+                const btnEl = this;
+                const origHtml = btnEl.innerHTML;
+                btnEl.disabled = true;
+                btnEl.innerHTML = '<i class="bi bi-lock me-2"></i>Locking...';
+                try {
+                    const data = await postJson(`/Giay/UpdateInventory?id=${id}`, { id: id, quantity: 0, status: 3 });
+                    if (data.success) {
+                        notify('success', 'Product locked', 'Product has been locked and will show as out of stock to users');
+                        // update row status badge
+                        const row = btnEl.closest('tr');
+                        const statusCell = row.querySelector('td:nth-child(5)');
+                        if (statusCell) statusCell.innerHTML = '<span class="badge bg-dark">Locked</span>';
+                        const qtyInput = row.querySelector('.quantity-input');
+                        if (qtyInput) qtyInput.value = 0;
+                        const updatedCell = row.querySelector('td:nth-child(6)');
+                        if (updatedCell) updatedCell.textContent = new Date().toLocaleString();
+                    } else {
+                        notify('error', 'Lock failed', data.message || 'Could not lock product');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    notify('error', 'Error', 'An error occurred while locking');
+                } finally {
+                    btnEl.disabled = false;
+                    btnEl.innerHTML = origHtml;
+                }
+            });
+        });
+    </script>
+}

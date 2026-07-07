@@ -1,0 +1,104 @@
+@using ASM.Models
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Extensions
+@using ASM.Constants
+@using ASM.Services
+@inject ICartSvc _cartSvc
+
+@{
+    string userName = Context.Session.GetString(SessionKey.NguoiDung.Username);
+    string fullName = Context.Session.GetString(SessionKey.NguoiDung.FullName);
+    
+    string khEmail = Context.Session.GetString(SessionKey.KhachHang.KH_Email);
+    string khFullName = Context.Session.GetString(SessionKey.KhachHang.KH_FullName);
+    string khIdStr = Context.Session.GetString(SessionKey.KhachHang.KH_Id);
+    
+    int cartCount = 0;
+    if (!string.IsNullOrEmpty(khIdStr) && int.TryParse(khIdStr, out int khId))
+    {
+        cartCount = _cartSvc.GetCartCount(khId);
+    }
+}
+
+<ul class="navbar-nav ms-auto">
+    @if (!string.IsNullOrEmpty(userName))
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle user-menu" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle me-1"></i> @fullName <span class="badge bg-danger ms-1">Admin</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                <li><h6 class="dropdown-header">Hello, @fullName!</h6></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Admin" asp-action="Index">
+                        <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form asp-area="" asp-controller="Admin" asp-action="Logout" method="post" class="d-inline">
+                        <button type="submit" class="dropdown-item text-danger">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    }
+    else if (!string.IsNullOrEmpty(khEmail))
+    {
+        <li class="nav-item dropdown position-relative">
+            <a class="nav-link dropdown-toggle user-menu text-white" href="#" id="customerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle me-1"></i> @khFullName
+                @if (cartCount > 0)
+                {
+                    <span class="badge bg-danger rounded-pill cart-badge-outside" id="cart-badge-outside">@cartCount</span>
+                }
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="customerDropdown">
+                <li><h6 class="dropdown-header">Hello, @khFullName!</h6></li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Khachhang" asp-action="Profile">
+                        <i class="bi bi-person-badge me-2"></i>My Account
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="ThucDon" asp-action="Index">
+                        <i class="bi bi-card-list me-2"></i>Products
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Cart" asp-action="Index">
+                        <i class="bi bi-cart me-2"></i>Cart
+                        @if (cartCount > 0)
+                        {
+                            <span class="badge bg-danger rounded-pill ms-2" id="cart-badge">@cartCount</span>
+                        }
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form asp-controller="Khachhang" asp-action="Logout" method="post" class="d-inline">
+                        <button type="submit" class="dropdown-item text-danger">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link btn btn-outline-light btn-sm px-3 text-white" asp-controller="Khachhang" asp-action="Login">
+                <i class="bi bi-person-circle me-1"></i>Login
+            </a>
+        </li>
+        <li class="nav-item ms-2">
+            <a class="nav-link btn btn-success btn-sm px-3" asp-controller="Khachhang" asp-action="Register">
+                <i class="bi bi-person-plus me-1"></i>Register
+            </a>
+        </li>
+    }
+</ul>

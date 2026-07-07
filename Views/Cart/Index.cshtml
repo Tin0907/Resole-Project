@@ -1,0 +1,559 @@
+@model List<ASM.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+    Layout = "_WebLayout";
+    decimal cartTotal = Model.Sum(item => item.ThanhTien);
+}
+
+<style>
+    .cart-page {
+        background: #f8f9fa;
+        min-height: calc(100vh - 200px);
+        padding: 2rem 0;
+    }
+
+    .cart-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px 15px 0 0;
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    .cart-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .cart-header p {
+        margin: 0;
+        opacity: 0.9;
+    }
+
+    .cart-card {
+        background: white;
+        border: none;
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .cart-item {
+        border-bottom: 1px solid #e9ecef;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .cart-item:hover {
+        background: #f8f9fa;
+    }
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+    .cart-item-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+    }
+
+    .cart-item-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    .cart-item-size {
+        color: #718096;
+        font-size: 0.9rem;
+    }
+
+    .cart-item-price {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #10b981;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 0.25rem;
+        background: white;
+    }
+
+    .quantity-btn {
+        width: 35px;
+        height: 35px;
+        border: none;
+        background: #667eea;
+        color: white;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .quantity-btn:hover {
+        background: #5568d3;
+        transform: scale(1.1);
+    }
+
+    .quantity-btn:disabled {
+        background: #cbd5e0;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .quantity-value {
+        min-width: 50px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .btn-remove {
+        color: #e53e3e;
+        background: #fff5f5;
+        border: 1px solid #fc8181;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-remove:hover {
+        background: #e53e3e;
+        color: white;
+        border-color: #e53e3e;
+    }
+
+    .summary-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        padding: 2rem;
+        position: sticky;
+        top: 1rem;
+    }
+
+    .summary-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        color: #4a5568;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 1rem;
+        margin-top: 1rem;
+        border-top: 2px solid #e9ecef;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2d3748;
+    }
+
+    .btn-checkout {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        color: white;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .btn-checkout:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .empty-cart {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-cart i {
+        font-size: 5rem;
+        color: #cbd5e0;
+        margin-bottom: 1rem;
+    }
+
+    .empty-cart h3 {
+        color: #4a5568;
+        margin-bottom: 1rem;
+    }
+
+    .empty-cart p {
+        color: #718096;
+        margin-bottom: 2rem;
+    }
+
+    @@media (max-width: 768px) {
+        .cart-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .cart-item {
+            padding: 1rem;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+        }
+
+        .summary-card {
+            position: static;
+            margin-top: 2rem;
+        }
+    }
+
+    /* Confirm Modal */
+    .confirm-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    .confirm-overlay.show {
+        opacity: 1;
+    }
+
+    .confirm-box {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem 2.5rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        transform: scale(0.85) translateY(20px);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .confirm-overlay.show .confirm-box {
+        transform: scale(1) translateY(0);
+    }
+
+    .confirm-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: #fff5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.25rem;
+    }
+
+    .confirm-icon i {
+        font-size: 1.8rem;
+        color: #e53e3e;
+    }
+
+    .confirm-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    .confirm-message {
+        color: #718096;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
+    .confirm-actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    .confirm-actions .btn-cancel {
+        flex: 1;
+        padding: 0.7rem 1.5rem;
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+        background: white;
+        color: #4a5568;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .confirm-actions .btn-cancel:hover {
+        background: #f7fafc;
+        border-color: #cbd5e0;
+    }
+
+    .confirm-actions .btn-confirm-delete {
+        flex: 1;
+        padding: 0.7rem 1.5rem;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #e53e3e, #c53030);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .confirm-actions .btn-confirm-delete:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(229, 62, 62, 0.4);
+    }
+</style>
+
+<div class="cart-page">
+    <div class="container-fluid" style="width: 90%; max-width: 1600px; margin: 0 auto;">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Cart Header -->
+                <div class="cart-header">
+                    <h1><i class="bi bi-cart3 me-2"></i>Your Shopping Cart</h1>
+                    <p>@Model.Count item(s) in your cart</p>
+                </div>
+
+                <!-- Cart Card -->
+                <div class="cart-card">
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <div class="cart-item">
+                                <div class="row align-items-center g-3">
+                                    <div class="col-auto">
+                                        <img src="~/images/Giay/@item.Hinh" alt="@item.Ten" class="cart-item-image">
+                                    </div>
+                                    <div class="col">
+                                        <div class="cart-item-name">@item.Ten</div>
+                                        <div class="cart-item-size">Size: @item.Size</div>
+                                        <div class="cart-item-price mt-2">@item.Gia.ToString("N0") VND</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="quantity-control">
+                                            <button type="button" 
+                                                    class="quantity-btn btn-decrease"
+                                                    data-giay-id="@item.GiayId"
+                                                    data-size="@item.Size"
+                                                    data-current-quantity="@item.SoLuong">
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+                                            <span class="quantity-value">@item.SoLuong</span>
+                                            <button type="button" 
+                                                    class="quantity-btn btn-increase"
+                                                    data-giay-id="@item.GiayId"
+                                                    data-size="@item.Size"
+                                                    data-current-quantity="@item.SoLuong">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="cart-item-price">@item.ThanhTien.ToString("N0") VND</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" 
+                                                class="btn btn-remove btn-remove-item"
+                                                data-giay-id="@item.GiayId"
+                                                data-size="@item.Size">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-cart">
+                            <i class="bi bi-cart-x"></i>
+                            <h3>Your cart is empty</h3>
+                            <p>Add products to your cart to continue shopping</p>
+                            <a asp-controller="ThucDon" asp-action="Index" class="btn btn-primary btn-lg">
+                                <i class="bi bi-shop me-2"></i>Explore Products
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Summary Card -->
+            <div class="col-lg-4">
+                <div class="summary-card">
+                    <h5 class="summary-title">
+                        <i class="bi bi-receipt me-2"></i>Order Summary
+                    </h5>
+                    
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="summary-subtotal">@cartTotal.ToString("N0") VND</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span>Free</span>
+                    </div>
+                    
+                    <div class="summary-total">
+                        <span>Total:</span>
+                        <span id="summary-total">@cartTotal.ToString("N0") VND</span>
+                    </div>
+
+                    @if (Model.Any())
+                    {
+                        <a asp-controller="Checkout" asp-action="Index" class="btn btn-checkout mt-3">
+                            <i class="bi bi-credit-card me-2"></i>Proceed to Checkout
+                        </a>
+                    }
+
+                    <div class="text-center mt-3">
+                        <a asp-controller="ThucDon" asp-action="Index" class="text-decoration-none">
+                            <i class="bi bi-arrow-left me-1"></i>Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // === Custom Confirm Modal ===
+        function showConfirmModal(title, message) {
+            return new Promise((resolve) => {
+                const overlay = document.createElement('div');
+                overlay.className = 'confirm-overlay';
+                overlay.innerHTML = `
+                    <div class="confirm-box">
+                        <div class="confirm-icon">
+                            <i class="bi bi-trash3"></i>
+                        </div>
+                        <div class="confirm-title">${title}</div>
+                        <div class="confirm-message">${message}</div>
+                        <div class="confirm-actions">
+                            <button class="btn-cancel">Cancel</button>
+                            <button class="btn-confirm-delete">Remove</button>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(overlay);
+                requestAnimationFrame(() => overlay.classList.add('show'));
+
+                const close = (result) => {
+                    overlay.classList.remove('show');
+                    setTimeout(() => overlay.remove(), 300);
+                    resolve(result);
+                };
+
+                overlay.querySelector('.btn-cancel').addEventListener('click', () => close(false));
+                overlay.querySelector('.btn-confirm-delete').addEventListener('click', () => close(true));
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) close(false);
+                });
+            });
+        }
+
+        // Quantity update handlers
+        document.querySelectorAll('.btn-increase, .btn-decrease').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const giayId = parseInt(this.dataset.giayId);
+                const size = this.dataset.size;
+                const currentQty = parseInt(this.dataset.currentQuantity);
+                const isIncrease = this.classList.contains('btn-increase');
+                const newQty = isIncrease ? currentQty + 1 : currentQty - 1;
+
+                if (newQty < 1) return;
+
+                try {
+                    const response = await fetch('/Cart/UpdateQuantity', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ giayId, size: size.toString(), quantity: newQty })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        showToast('error', 'Error', data.message || 'An error occurred');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast('error', 'Error', 'Something went wrong');
+                }
+            });
+        });
+
+        // Remove item handlers
+        document.querySelectorAll('.btn-remove-item').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const confirmed = await showConfirmModal(
+                    'Remove Item',
+                    'Are you sure you want to remove this item from your cart?'
+                );
+                if (!confirmed) return;
+
+                const giayId = parseInt(this.dataset.giayId);
+                const size = this.dataset.size;
+
+                try {
+                    const response = await fetch('/Cart/Remove', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ giayId, size: size.toString() })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        showToast('success', 'Removed', 'Item removed from cart');
+                        setTimeout(() => location.reload(), 600);
+                    } else {
+                        showToast('error', 'Error', data.message || 'An error occurred');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast('error', 'Error', 'Something went wrong');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,99 @@
+﻿@model ASM.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "Delete User";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="mb-0 fw-bold text-danger">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Delete User
+        </h1>
+        <p class="text-muted small">Are you sure you want to delete this user?</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-danger rounded-3">
+            <div class="card-header bg-danger text-white py-3 border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-exclamation-circle me-2"></i>Warning: This action cannot be undone
+                </h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-warning">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Note:</strong> Deleting this user will permanently remove all related information.
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Username</h6>
+                            <p class="fs-5 mb-0 fw-bold">@Html.DisplayFor(model => model.User)</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Full Name</h6>
+                            <p class="fs-5 mb-0 fw-bold">@Html.DisplayFor(model => model.HoTen)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Email</h6>
+                            <p class="fs-5 mb-0">@Html.DisplayFor(model => model.Email)</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Status</h6>
+                            <p class="mb-0">
+                                @if (Model.Locked)
+                                {
+                                    <span class="badge bg-success fs-6">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger fs-6">Locked</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="NguoiDungID" />
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="bi bi-trash me-2"></i>Confirm Delete
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-circle me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 rounded-3 bg-danger text-white">
+            <div class="card-body p-4">
+                <h6 class="fw-bold mb-3">
+                    <i class="bi bi-shield-exclamation me-2"></i>Important Notes
+                </h6>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><i class="bi bi-dot me-2"></i>This action is irreversible</li>
+                    <li class="mb-2"><i class="bi bi-dot me-2"></i>All related data will be deleted</li>
+                    <li class="mb-2"><i class="bi bi-dot me-2"></i>Please confirm carefully</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

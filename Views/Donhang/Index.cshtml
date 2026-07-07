@@ -1,0 +1,299 @@
+﻿@model IEnumerable<ASM.Models.DonHang>
+
+@{
+    ViewData["Title"] = "Order Management";
+
+    var countAll = Model.Count();
+    var countChoXacNhan = Model.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.ChoXacNhan);
+    var countChoLayHang = Model.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.ChoLayHang);
+    var countChoGiaoHang = Model.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.ChoGiaoHang);
+    var countDaGiao = Model.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.DaGiao);
+    var countDaDanhGia = Model.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.DaDanhGia);
+    var countDaHuy = Model.Count(o => o.TrangThai == ASM.Models.TrangThaiDonHang.DaHuy);
+}
+
+<style>
+    .order-status-tabs {
+        display: flex;
+        gap: 0;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 1.5rem;
+    }
+    .order-status-tab {
+        flex: 1;
+        text-align: center;
+        padding: 1rem 0.5rem;
+        cursor: pointer;
+        border: none;
+        background: white;
+        color: #6c757d;
+        font-weight: 500;
+        font-size: 0.85rem;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+    .order-status-tab:hover {
+        background: #f8f9fa;
+        color: #333;
+    }
+    .order-status-tab.active {
+        color: #667eea;
+        border-bottom-color: #667eea;
+        background: #f0f0ff;
+        font-weight: 700;
+    }
+    .order-status-tab .tab-icon {
+        font-size: 1.5rem;
+        display: block;
+        margin-bottom: 0.25rem;
+        position: relative;
+        display: inline-block;
+    }
+    .order-status-tab .tab-count {
+        position: absolute;
+        top: -6px;
+        right: -12px;
+        background: #e53e3e;
+        color: white;
+        font-size: 0.6rem;
+        font-weight: 700;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+    }
+    .order-status-tab .tab-label {
+        font-size: 0.8rem;
+    }
+</style>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="mb-0 fw-bold text-primary">
+            <i class="bi bi-bag-check-fill me-2"></i>Order Management
+        </h1>
+        <p class="text-muted small">View and manage customer orders</p>
+    </div>
+</div>
+
+<!-- Order Status Tabs -->
+<div class="order-status-tabs">
+    <button class="order-status-tab active" data-filter="All">
+        <span class="tab-icon">
+            <i class="bi bi-grid-3x3-gap"></i>
+            @if (countAll > 0)
+            {
+                <span class="tab-count">@countAll</span>
+            }
+        </span>
+        <span class="tab-label">All</span>
+    </button>
+    <button class="order-status-tab" data-filter="ChoXacNhan">
+        <span class="tab-icon">
+            <i class="bi bi-clipboard-check"></i>
+            @if (countChoXacNhan > 0)
+            {
+                <span class="tab-count">@countChoXacNhan</span>
+            }
+        </span>
+        <span class="tab-label">Pending</span>
+    </button>
+    <button class="order-status-tab" data-filter="ChoLayHang">
+        <span class="tab-icon">
+            <i class="bi bi-box-seam"></i>
+            @if (countChoLayHang > 0)
+            {
+                <span class="tab-count">@countChoLayHang</span>
+            }
+        </span>
+        <span class="tab-label">Packing</span>
+    </button>
+    <button class="order-status-tab" data-filter="ChoGiaoHang">
+        <span class="tab-icon">
+            <i class="bi bi-truck"></i>
+            @if (countChoGiaoHang > 0)
+            {
+                <span class="tab-count">@countChoGiaoHang</span>
+            }
+        </span>
+        <span class="tab-label">Shipping</span>
+    </button>
+    <button class="order-status-tab" data-filter="DaGiao">
+        <span class="tab-icon">
+            <i class="bi bi-check-circle"></i>
+            @if (countDaGiao > 0)
+            {
+                <span class="tab-count">@countDaGiao</span>
+            }
+        </span>
+        <span class="tab-label">Delivered</span>
+    </button>
+    <button class="order-status-tab" data-filter="DaDanhGia">
+        <span class="tab-icon">
+            <i class="bi bi-star"></i>
+            @if (countDaDanhGia > 0)
+            {
+                <span class="tab-count">@countDaDanhGia</span>
+            }
+        </span>
+        <span class="tab-label">Reviewed</span>
+    </button>
+    <button class="order-status-tab" data-filter="DaHuy">
+        <span class="tab-icon">
+            <i class="bi bi-x-circle"></i>
+            @if (countDaHuy > 0)
+            {
+                <span class="tab-count">@countDaHuy</span>
+            }
+        </span>
+        <span class="tab-label">Cancelled</span>
+    </button>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <form method="get" asp-action="Index">
+            <div class="input-group input-group-lg shadow-sm">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" 
+                       name="searchTerm" 
+                       value="@ViewData["CurrentFilter"]" 
+                       class="form-control border-start-0 border-end-0 ps-0" 
+                       placeholder="Search by customer name, order ID..." />
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search me-2"></i>Search
+                </button>
+                @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()))
+                {
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-x-circle me-2"></i>Clear
+                    </a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3">
+    <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 fw-bold">
+            <i class="bi bi-list-ul me-2"></i>Order List
+        </h6>
+        <span class="badge bg-primary" id="filteredCount">Total: @Model.Count() orders</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light border-bottom">
+                    <tr>
+                        <th class="fw-bold text-muted small text-uppercase">Order ID</th>
+                        <th class="fw-bold text-muted small text-uppercase">Order Date</th>
+                        <th class="fw-bold text-muted small text-uppercase">Customer</th>
+                        <th class="fw-bold text-muted small text-uppercase">Total Amount</th>
+                        <th class="fw-bold text-muted small text-uppercase">Status</th>
+                        <th class="fw-bold text-muted small text-uppercase text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody">
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr class="align-middle" data-status="@item.TrangThai">
+                                <td class="fw-bold text-primary">#@item.Id</td>
+                                <td>
+                                    <small class="text-muted">@item.NgayDatHang.ToString("dd/MM/yyyy")</small><br/>
+                                    <small class="text-muted">@item.NgayDatHang.ToString("HH:mm")</small>
+                                </td>
+                                <td class="fw-bold">@item.KhachHang.Fullname</td>
+                                <td class="fw-bold text-success">@item.TongTien.ToString("N0") VND</td>
+                                <td>
+                                    @{
+                                        var statusClass = item.TrangThai switch
+                                        {
+                                            ASM.Models.TrangThaiDonHang.ChoXacNhan => "bg-info text-dark",
+                                            ASM.Models.TrangThaiDonHang.ChoLayHang => "bg-warning text-dark",
+                                            ASM.Models.TrangThaiDonHang.ChoGiaoHang => "bg-primary",
+                                            ASM.Models.TrangThaiDonHang.DaGiao => "bg-success",
+                                            ASM.Models.TrangThaiDonHang.DaDanhGia => "bg-secondary",
+                                            ASM.Models.TrangThaiDonHang.DaHuy => "bg-danger",
+                                            _ => "bg-secondary"
+                                        };
+                                        var statusLabel = item.TrangThai switch
+                                        {
+                                            ASM.Models.TrangThaiDonHang.ChoXacNhan => "Pending",
+                                            ASM.Models.TrangThaiDonHang.ChoLayHang => "Packing",
+                                            ASM.Models.TrangThaiDonHang.ChoGiaoHang => "Shipping",
+                                            ASM.Models.TrangThaiDonHang.DaGiao => "Delivered",
+                                            ASM.Models.TrangThaiDonHang.DaDanhGia => "Reviewed",
+                                            ASM.Models.TrangThaiDonHang.DaHuy => "Cancelled",
+                                            _ => "Unknown"
+                                        };
+                                    }
+                                    <span class="badge @statusClass">@statusLabel</span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox display-4 d-block mb-3"></i>
+                                <p class="mb-0">No orders found</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.order-status-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                const filter = this.dataset.filter;
+
+                // Toggle active
+                document.querySelectorAll('.order-status-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Filter table rows
+                let visibleCount = 0;
+                document.querySelectorAll('#orderTableBody tr[data-status]').forEach(row => {
+                    if (filter === 'All' || row.dataset.status === filter) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Update count badge
+                const label = filter === 'All' ? 'Total' : this.querySelector('.tab-label').textContent.trim();
+                document.getElementById('filteredCount').textContent = label + ': ' + visibleCount + ' orders';
+            });
+        });
+    </script>
+}

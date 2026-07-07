@@ -1,0 +1,173 @@
+﻿@model IEnumerable<ASM.Models.Giay>
+
+@{
+    ViewData["Title"] = "Product Management";
+}
+
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="mb-0 fw-bold text-primary">
+                <i class="bi bi-basket3-fill me-2"></i>Product Management
+            </h1>
+            <p class="text-muted small">Manage shoe inventory</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="Inventory" class="btn btn-outline-primary btn-lg shadow-sm">
+                <i class="bi bi-menu-button-wide me-2"></i>Inventory
+            </a>
+            <a asp-action="Create" class="btn btn-success btn-lg shadow-sm">
+                <i class="bi bi-plus-circle me-2"></i>Add New Shoe
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <form method="get" asp-action="Index">
+            <div class="input-group input-group-lg shadow-sm">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" 
+                       name="searchTerm" 
+                       value="@ViewData["CurrentFilter"]" 
+                       class="form-control border-start-0 border-end-0 ps-0" 
+                       placeholder="Search by shoe name, category..." />
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search me-2"></i>Search
+                </button>
+                @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()))
+                {
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-x-circle me-2"></i>Clear
+                    </a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3">
+    <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 fw-bold">
+            <i class="bi bi-list-ul me-2"></i>Shoe List
+        </h6>
+        <span class="badge bg-primary">Total: @Model.Count() shoes</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light border-bottom">
+                    <tr>
+                        <th class="fw-bold text-muted small text-uppercase">Shoe Name</th>
+                        <th class="fw-bold text-muted small text-uppercase">Price</th>
+                        <th class="fw-bold text-muted small text-uppercase">Category</th>
+                        <th class="fw-bold text-muted small text-uppercase">Image</th>
+                        <th class="fw-bold text-muted small text-uppercase">Quantity</th>
+                        <th class="fw-bold text-muted small text-uppercase">Status</th>
+                        <th class="fw-bold text-muted small text-uppercase text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr class="align-middle">
+                                <td class="fw-bold">@item.Ten</td>
+                                <td class="fw-bold text-success">@item.Gia.ToString("N0") VND</td>
+                                <td>
+                                    <span class="badge bg-info">@item.PhanLoai</span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Hinh))
+                                    {
+                                        <img src="~/images/Giay/@item.Hinh" class="img-thumbnail rounded" style="width:60px; height:60px; object-fit:cover;" alt="@item.Ten" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="width:60px; height:60px;">
+                                            <i class="bi bi-image text-muted"></i>
+                                        </div>
+                                    }
+                                </td>
+                                <td>@item.Quantity</td>
+                                <td>
+                                    @switch(item.Status)
+                                    {
+                                        case ASM.Models.ProductStatus.Locked:
+                                            <span class="badge bg-dark">Locked</span>
+                                            break;
+                                        case ASM.Models.ProductStatus.OutOfStock:
+                                            <span class="badge bg-danger">Out of Stock</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-success">In Stock</span>
+                                            break;
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal-@item.Id"
+                                                title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1" aria-labelledby="deleteModalLabel-@item.Id" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title" id="deleteModalLabel-@item.Id">
+                                                <i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete
+                                            </h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="mb-2">Are you sure you want to delete this shoe?</p>
+                                            <p class="fw-bold text-danger mb-0">@item.Ten</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                <i class="bi bi-x-circle me-2"></i>Cancel
+                                            </button>
+                                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="bi bi-trash me-2"></i>Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox display-4 d-block mb-3"></i>
+                                <p class="mb-0">No shoes found</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

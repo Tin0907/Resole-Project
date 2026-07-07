@@ -1,0 +1,35 @@
+@model IEnumerable<ASM.Models.Giay>
+@{
+    ViewData["Title"] = "Shoe List";
+}
+
+<div class="card shadow-sm border-0 rounded-3">
+    <div class="card-header bg-light py-3">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-card-list me-2"></i>Shoe List</h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="align-middle">
+                    <td>@item.Ten</td>
+                    <td>@item.Gia.ToString("N0") VND</td>
+                    <td>@(item.TrangThai ? "In Stock" : "Out of Stock")</td>
+                    <td>
+                        <img src="~/images/Giay/@item.Hinh" class="img-thumbnail" style="width:60px; height:60px; object-fit:cover;" alt="@item.Ten" />
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

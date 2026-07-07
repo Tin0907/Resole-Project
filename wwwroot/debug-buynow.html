@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Buy Now - Simple Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .log {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .log-success { color: green; }
+        .log-error { color: red; }
+        .log-info { color: blue; }
+    </style>
+</head>
+<body>
+    <div class="test-card">
+        <h1>?? Debug Buy Now</h1>
+        <p>Test tr?c ti?p API Buy Now</p>
+
+        <button onclick="testBuyNow()">1?? Test Buy Now API</button>
+        <button onclick="testCheckout()">2?? Test Checkout Page</button>
+        <button onclick="testFullFlow()">3?? Test Full Flow</button>
+        <button onclick="clearLog()">??? Clear Log</button>
+
+        <div class="log" id="log"></div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        async function testBuyNow() {
+            log('?? Testing Buy Now API...', 'info');
+            
+            try {
+                const response = await fetch('/Checkout/BuyNow', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        giayId: 1,
+                        size: 'M',
+                        soLuong: 1
+                    })
+                });
+
+                log(`?? Response Status: ${response.status}`, 'info');
+                log(`?? Response URL: ${response.url}`, 'info');
+
+                if (!response.ok) {
+                    log(`? HTTP Error: ${response.status} ${response.statusText}`, 'error');
+                    const text = await response.text();
+                    log(`Response: ${text}`, 'error');
+                    return;
+                }
+
+                const data = await response.json();
+                log(`?? Response Data: ${JSON.stringify(data, null, 2)}`, 'info');
+
+                if (data.success) {
+                    log('? Buy Now API works!', 'success');
+                } else {
+                    log(`? API returned error: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                log(`?? Fetch Error: ${error.message}`, 'error');
+                log(`Error details: ${error.stack}`, 'error');
+            }
+        }
+
+        async function testCheckout() {
+            log('?? Testing Checkout Page...', 'info');
+            
+            try {
+                const response = await fetch('/Checkout');
+                log(`?? Response Status: ${response.status}`, 'info');
+                log(`?? Response URL: ${response.url}`, 'info');
+
+                if (response.redirected) {
+                    log(`?? Redirected to: ${response.url}`, 'info');
+                }
+
+                if (response.ok) {
+                    log('? Checkout page accessible!', 'success');
+                    log('Opening in new tab...', 'info');
+                    window.open('/Checkout', '_blank');
+                } else {
+                    log(`? Cannot access Checkout: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`?? Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testFullFlow() {
+            log('?? Starting Full Buy Now Flow Test...', 'info');
+            
+            try {
+                // Step 1: Call Buy Now API
+                log('Step 1: Calling Buy Now API...', 'info');
+                const response = await fetch('/Checkout/BuyNow', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        giayId: 1,
+                        size: 'M',
+                        soLuong: 1
+                    })
+                });
+
+                const data = await response.json();
+                log(`Response: ${JSON.stringify(data)}`, 'info');
+
+                if (!data.success) {
+                    log(`? Step 1 Failed: ${data.message}`, 'error');
+                    return;
+                }
+
+                log('? Step 1 Complete: Buy Now API success', 'success');
+
+                // Step 2: Redirect to Checkout
+                log('Step 2: Redirecting to Checkout in 2 seconds...', 'info');
+                setTimeout(() => {
+                    log('?? Redirecting now...', 'info');
+                    window.location.href = '/Checkout';
+                }, 2000);
+
+            } catch (error) {
+                log(`?? Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-log on page load
+        window.onload = function() {
+            log('?? Debug tool loaded. Click buttons to test.', 'success');
+            log(`Current URL: ${window.location.href}`, 'info');
+        };
+    </script>
+</body>
+</html>

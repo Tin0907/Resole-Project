@@ -1,0 +1,143 @@
+﻿@model ASM.Models.DonHang
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="mb-0 fw-bold text-primary">
+            <i class="bi bi-bag-check-fill me-2"></i>Order Details
+        </h1>
+        <p class="text-muted small">Detailed order information</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-header bg-light py-3 border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-file-text me-2"></i>Order Information
+                </h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Order Date</h6>
+                            <p class="fs-5 mb-0">
+                                <span class="badge bg-secondary">@Html.DisplayFor(model => model.NgayDatHang)</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Total Amount</h6>
+                            <p class="fs-5 mb-0 text-success fw-bold">@Html.DisplayFor(model => model.TongTien)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Status</h6>
+                            <p class="mb-0">
+                                @{
+                                    var statusClass = Model.TrangThai switch
+                                    {
+                                        ASM.Models.TrangThaiDonHang.ChoXacNhan => "bg-info text-dark",
+                                        ASM.Models.TrangThaiDonHang.ChoLayHang => "bg-warning text-dark",
+                                        ASM.Models.TrangThaiDonHang.ChoGiaoHang => "bg-primary",
+                                        ASM.Models.TrangThaiDonHang.DaGiao => "bg-success",
+                                        ASM.Models.TrangThaiDonHang.DaDanhGia => "bg-secondary",
+                                        ASM.Models.TrangThaiDonHang.DaHuy => "bg-danger",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @statusClass fs-6">@Html.DisplayFor(model => model.TrangThai)</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-muted text-uppercase small">Customer</h6>
+                            <p class="fs-5 mb-0 fw-bold">@Html.DisplayFor(model => model.KhachHang.Fullname)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="fw-bold text-muted text-uppercase small">Notes</h6>
+                    <p class="mb-0">@Html.DisplayFor(model => model.GhiChu)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-light py-3 border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-list-check me-2"></i>Order Details
+                </h6>
+            </div>
+            <div class="card-body p-0">
+                <Partial name="_DonhangChitiet" model="@Model.DonhangChitiets" />
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-light py-3">
+                <h6 class="mb-0 fw-bold">
+                    <i class="bi bi-tools me-2"></i>Actions
+                </h6>
+            </div>
+            <div class="card-body">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning w-100 mb-2">
+                    <i class="bi bi-pencil-square me-2"></i>Edit
+                </a>
+
+                @if (Model.TrangThai == ASM.Models.TrangThaiDonHang.ChoXacNhan)
+                {
+                    <button id="btnApprove" class="btn btn-success w-100 mb-2">
+                        <i class="bi bi-check2-circle me-2"></i>Approve Order
+                    </button>
+                }
+
+                <a asp-action="Index" class="btn btn-secondary w-100">
+                    <i class="bi bi-arrow-left me-2"></i>Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('btnApprove')?.addEventListener('click', async function() {
+            if (!confirm('Are you sure you want to approve this order? This will deduct stock quantities.')) return;
+            const btn = this;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-arrow-repeat me-2 spin-icon"></i>Processing...';
+            try {
+                const resp = await fetch(`/Donhang/Approve/${@Model.Id}`, { method: 'POST' });
+                const data = await resp.json();
+                if (data.success) {
+                    alert(data.message || 'Order approved');
+                    // reload to show updated status and quantities
+                    location.reload();
+                } else {
+                    alert(data.message || 'Could not approve order');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-check2-circle me-2"></i>Approve Order';
+            }
+        });
+    </script>
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Buy Now API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .result {
+            background: white;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>?? Test Buy Now Functionality</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Check if BuyNow API exists</h2>
+        <button onclick="testBuyNowAPI()">Test BuyNow API</button>
+        <div id="test1-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Check Session</h2>
+        <button onclick="testSession()">Check Session</button>
+        <div id="test2-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Full Buy Now Flow</h2>
+        <p>Product ID: <input type="number" id="productId" value="1" /></p>
+        <p>Size: <input type="text" id="size" value="M" /></p>
+        <p>Quantity: <input type="number" id="quantity" value="1" /></p>
+        <button onclick="testFullFlow()">Test Full Flow</button>
+        <div id="test3-result" class="result"></div>
+    </div>
+
+    <script>
+        function testBuyNowAPI() {
+            const resultDiv = document.getElementById('test1-result');
+            resultDiv.innerHTML = '? Testing...';
+
+            fetch('/Checkout/BuyNow', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    giayId: 1,
+                    size: 'M',
+                    soLuong: 1
+                })
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                if (data.success) {
+                    resultDiv.innerHTML = `<div class="success">? SUCCESS: API is working!</div>
+                                          <pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">? ERROR: ${data.message}</div>
+                                          <pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `<div class="error">? FETCH ERROR: ${error.message}</div>
+                                      <p>Check console for details.</p>`;
+            });
+        }
+
+        function testSession() {
+            const resultDiv = document.getElementById('test2-result');
+            resultDiv.innerHTML = '? Checking session...';
+
+            // First set the session
+            fetch('/Checkout/BuyNow', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    giayId: 1,
+                    size: 'M',
+                    soLuong: 2
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Now try to access Checkout to see if session is preserved
+                    fetch('/Checkout')
+                        .then(response => {
+                            if (response.ok) {
+                                resultDiv.innerHTML = `<div class="success">? Session is working!</div>
+                                                      <p>Redirected to Checkout successfully.</p>
+                                                      <a href="/Checkout" target="_blank">Open Checkout Page</a>`;
+                            } else {
+                                resultDiv.innerHTML = `<div class="error">? Cannot access Checkout</div>
+                                                      <p>Status: ${response.status}</p>`;
+                            }
+                        });
+                } else {
+                    resultDiv.innerHTML = `<div class="error">? Cannot set session: ${data.message}</div>`;
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<div class="error">? ERROR: ${error.message}</div>`;
+            });
+        }
+
+        function testFullFlow() {
+            const resultDiv = document.getElementById('test3-result');
+            const productId = document.getElementById('productId').value;
+            const size = document.getElementById('size').value;
+            const quantity = document.getElementById('quantity').value;
+
+            resultDiv.innerHTML = '? Testing full flow...';
+
+            // Step 1: Call BuyNow API
+            fetch('/Checkout/BuyNow', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    giayId: parseInt(productId),
+                    size: size,
+                    soLuong: parseInt(quantity)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resultDiv.innerHTML = `<div class="success">? Step 1: BuyNow API called successfully!</div>
+                                          <p>Redirecting to Checkout in 2 seconds...</p>`;
+                    
+                    // Step 2: Redirect to Checkout
+                    setTimeout(() => {
+                        window.location.href = '/Checkout';
+                    }, 2000);
+                } else {
+                    resultDiv.innerHTML = `<div class="error">? Step 1 Failed: ${data.message}</div>`;
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<div class="error">? ERROR: ${error.message}</div>`;
+            });
+        }
+    </script>
+</body>
+</html>
